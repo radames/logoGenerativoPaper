@@ -1,0 +1,60 @@
+<html>
+<head>
+	<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.22/paper-full.min.js"></script>
+	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript" src="sketch.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<style>
+		html, body {
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+			background:white;
+		}
+		@media all and (min-heigth: 801px) {
+			iframe {
+				heigth: 1500px;
+			}
+		}
+		
+		.btn-group-vertical > button{
+			margin-bottom:10px;
+			border-radius:10px !important;
+		}
+	</style> <!-- this line removes any default padding -->
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10">
+				<canvas id="logoCanvas0" width="50px" height="50px"></canvas>
+				<svg id="sir" height="50" width="50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				  <image x="0" y="5" height="40px" width="40px"  xlink:href="fs-logo.svg"/>
+				</svg>
+			</div>
+		</div>
+		<div class="row">
+
+			<div class="col-md-10 col-md-offset-1">
+				<div class="col-md-6">
+					<div style="left: 50%; margin-top:100px;">
+						<div class="btn-group-vertical" >
+							<button id="gerar" type="button" class="btn btn-default">GERAR</button>
+							<button id="salvar" type="button" class="btn btn-default">SALVAR</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<canvas id="logoCanvas1" width="600px" height="300px"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>
