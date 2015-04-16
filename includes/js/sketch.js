@@ -63,10 +63,33 @@ window.onload = function() {
 		}
 	}
 	
-//	pointsLayers.forEach(function(o){
-//		console.log(o);
-//	});
-//	
+
+        var fileNames = ["FS_Letters", "FS_Security", "FS_Learning", "FS_Insurance", "FS_Entertainment","FS_Company","FS_Assistance"];
+
+-       //alpha max is 200 = 0.78% de alpah
+-       //min triangules is 5
+
+-       var tmpLayers = k_combinations([0,1,2,3,4,5],3);
++//     var svgsGroup = new paper1.Group();
++//     for(var i in fileNames){
++//             //loading all svgs in the group
++//             var p = new paper1.Path();
++//             p.name =  fileNames[i];
++//
++//             paper1.project.importSVG("includes/images/"+ fileNames[i]+ ".svg", {
++//                                                       expandShapes: true,
++//                                                       onLoad: function(node, item) {
++//                                                               p.project.activeLayer.addChild(node);
++//                                                       }
++//
++//             });
++//             p.position = new paper1.Point(100,100);
++//             p.visible = true;
++//             svgsGroup.addChild(p);
++//
++//     }
+	
+	
 	tool = new paper1.Tool();
 
 

@@ -1,0 +1,329 @@
+@import "compass"
+@import "compass/reset"
+@import "compass/css3/opacity"
+@import "compass/css3/border-radius"
+@import "compass/css3/box-sizing" 
+@import "compass/css3/background-size" 
+@import "compass/css3/box-shadow" 
+
+*
+	outline: none
+
+.button
+	overflow: hidden
+	display: block
+	color: #fff
+	text-align: center
+	text-transform: uppercase
+	border: 0
+	padding: 15px 0
+	font-size: 13px
+	background-color: #CCC
+	cursor: pointer
+	text-decoration: none
+
+.horizontal
+	float: left
+	text-indent: -9999px
+	width: 138px
+	height: 37px
+	margin:
+		top: 30px
+		left: 5px
+		right: 30px
+	background: url("../images/ico-horizontal.png") 0 0 no-repeat
+
+.vertical
+	float: left
+	text-indent: -9999px
+	width: 83px
+	height: 53px
+	margin:
+		top: 20px
+		left: 5px
+		right: 0
+		bottom: 20px
+	background: url("../images/ico-vertical.png") 0 0 no-repeat
+	
+/** input type radio custom **/
+.radio-content
+	float: left
+	margin-top: 38px
+
+	input[type="radio"]
+		display: none
+
+	input[type="radio"] + label
+		cursor: pointer
+
+	input[type="radio"] + label span
+		background-color: #fff
+		border: 2px solid #b3b3b3
+		display: inline-block
+		width: 16px
+		height: 16px
+		margin: -1px 7px 0 0
+		vertical-align: middle
+		cursor: pointer
+		-moz-border-radius: 50%
+		border-radius: 50%
+
+	input[type="radio"]:checked + label span:before
+		background-color: #b3b3b3
+		content: ""
+		width: 10px
+		height: 10px
+		float: left
+		border-radius:  50%
+		position: relative
+		top: 3px
+		left: 3px
+/** //input type radio custom **/
+
+/** select custom **/
+.select-content
+	width: 305px
+	cursor: pointer
+	overflow: hidden
+	background: #fff url("../images/ico-arrow-select.jpg") 100% 50% no-repeat
+
+
+	select
+		padding: 10px 5px
+		margin: 0
+		width: 100%
+		border: 1px solid #cfcfcf
+		border-right: 0
+		border-radius: 0
+		box-shadow: none
+		background-color: transparent
+		background-image: none
+		-webkit-appearance: none
+		-moz-appearance: none
+		appearance: none
+
+	select:focus
+		outline: none
+/** //select custom **/
+
+body
+	color: #333333
+	font-family: Verdana
+	font-weight: normal
+	background-color: #efefef
+	padding-bottom: 40px
+
+	header
+		background-color: #fff
+
+		h1
+			a
+				float: left
+				width: 58px
+				height: 108px
+				text-indent: -9999px
+				margin: 5px 0 25px 0
+				background: url("../images/logo.png") 0 0 no-repeat
+
+		p
+			float: left
+			width: 150px
+			margin: 90px 10px 0 15px
+			font-size: 12px
+			color: #404041
+
+		a.logout
+			float: left
+			text-decoration: none
+			font-size: 13px
+			color: #CD1337
+			margin-top: 89px
+
+			&:hover
+				text-decoration: underline
+
+		.right
+			float: right
+			margin-right: 100px
+			
+			h2, span
+				overflow: hidden
+				width: 100%
+
+			h2
+				font-size: 40px
+				margin: 33px 0 10px 0
+
+			span
+				font-size: 14px
+
+	.content
+		overflow: hidden
+		width: 1020px
+		margin: 0 auto
+
+
+		&#login
+			h1
+				overflow: hidden
+				width: 350px
+				font-size: 20px
+				padding-bottom: 2px
+				padding-left: 20px
+				margin: 80px auto 20px auto
+
+			form
+				overflow: hidden
+				width: 350px
+				margin: 0 auto
+
+				dl
+					width: 350px
+					overflow: hidden
+
+					dt
+						float: left
+						width: 50px
+						margin: 10px 10px 10px 0
+						font-size: 12px
+						text-align: right
+
+					dd
+						float: left
+						width: 290px
+						margin-bottom: 10px
+
+						input
+							+box-sizing(border-box)
+
+							height: 35px
+							width: 100%
+							padding: 0 10px
+							background-color: #fff
+							border: 1px solid #c5c5c5
+
+				button
+					float: right
+					width: 290px
+					margin-top: 10px
+					background-color: #2BBBB5
+
+		&#home
+			width: 790px
+			margin-top: 35px
+			position: relative
+
+			h2
+				font-size: 20px
+				margin-bottom: 10px
+
+			p
+				font-size: 12px
+
+			.criar-logo
+				overflow: hidden
+
+				.left
+					float: left
+					width: 382px
+					margin-right: 20px
+					position: relative
+
+					div
+						width: 382px
+						height: 382px
+						display: table-cell
+						background-color: #fff
+						text-align: center
+						vertical-align: middle
+
+					a
+						width: 190px
+						position: relative
+						top: -22px
+						background-color: #2bbbb5
+
+				.right
+					float: left
+					width: 368px
+
+					a.fechar
+						position: absolute
+						top: 35px
+						right: 0
+						width: 12px
+						height: 12px
+						text-indent: -9999px
+						background: url("../images/ico-fechar.png") 0 0 no-repeat
+
+					#embed-code
+						+box-sizing(border-box)
+
+						background-color: #fff
+						width: 368px
+						height: 245px
+						padding: 15px 20px
+						margin-bottom: 20px
+
+						.select-content
+							width: 330px
+							position: relative
+							top: 10px
+
+						h3
+							text-transform: uppercase
+
+						.tamanho-logo
+							p
+								float: left
+								margin: 3px 15px 0 0
+
+							input
+								float: left
+								width: 40px
+								text-align: center
+
+							span
+								float: left
+								font-size: 13px
+								margin: 2px 10px 0 10px
+
+						.link-embed
+							width: 320px
+							padding: 6px 3px
+							font-size: 12px
+							margin-top: 20px
+
+					a.embed-code
+						background-color: #6d6d6d
+						font-size: 20px
+						width: 300px
+						padding: 25px 0
+						margin-bottom: 115px
+
+					input.name
+						width: 100%
+						margin: 20px 0 15px 0
+						font-size: 17px
+						background-color: transparent
+						border: 0
+						border-bottom: 2px solid #c5c5c5
+
+					button
+						background-color: #2bbbb5
+						width: 300px
+
+			.print-logo
+				overflow: hidden
+				width: 330px
+				margin: 30px auto 0 auto
+				
+				.visualizando
+					padding: 20px 0
+
+				.salvar
+					background-color: #cd171e
+					width: 300px
+					padding: 30px 0
+					margin-top: 20px
+					font-size: 20px
