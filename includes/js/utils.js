@@ -20,6 +20,7 @@ function vertexPermutation(nLayer) {
 function millis(){
 	return new Date().getTime()- firstMillis;	
 }
+
 function constrain(val, max, min){
 	if(val >= max){ return max;}
 	if(val <= min){ return min;}
@@ -96,23 +97,23 @@ function range(start, stop, step){
         // one param defined
         stop = start;
         start = 0;
-    };
+    }
     if (typeof step=='undefined'){
         step = 1;
-    };
+    }
     if ((step>0 && start>=stop) || (step<0 && start<=stop)){
         return [];
-    };
+    }
     var result = [];
     for (var i=start; step>0 ? i<stop : i>stop; i+=step){
         result.push(i);
-    };
+    }
     return result;
-};
+}
 
-noAccents = function(s){
+function noAccents(s){
     var r = s.toLowerCase();
-    non_asciis = {'a': '[àáâãäå]', 'ae': 'æ', 'c': 'ç', 'e': '[èéêë]', 'i': '[ìíîï]', 'n': 'ñ', 'o': '[òóôõö]', 'oe': 'œ', 'u': '[ùúûűü]', 'y': '[ýÿ]'};
-    for (i in non_asciis) { r = r.replace(new RegExp(non_asciis[i], 'g'), i); }
+    var non_asciis = {'a': '[àáâãäå]', 'ae': 'æ', 'c': 'ç', 'e': '[èéêë]', 'i': '[ìíîï]', 'n': 'ñ', 'o': '[òóôõö]', 'oe': 'œ', 'u': '[ùúûűü]', 'y': '[ýÿ]'};
+    for (var i in non_asciis) { r = r.replace(new RegExp(non_asciis[i], 'g'), i); }
     return r;
-};
+}
