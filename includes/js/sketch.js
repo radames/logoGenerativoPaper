@@ -11,6 +11,9 @@ var MIN_LAYER = 4;
 var MIN_ALPHA = 0.3;
 var MAX_ALPHA = 0.8;
 
+	//alpha max is 200 = 0.78% de alpah
+    //min triangules is 5
+	
 
 var firstMillis = 0;
 var lastTime = 0;
@@ -45,12 +48,15 @@ window.onload = function() {
 
 	var canvas = document.getElementById('logoCanvas0');
 	var canvas2 = document.getElementById('logoCanvas1');
-
+	var canvas3 = document.getElementById('finalCanvas');
+	
 	var paper1 = new paper.PaperScope();
 	var paper2 = new paper.PaperScope();
-	
+	var paper3 = new paper.PaperScope();
+
 	paper1.setup(canvas);
 	paper2.setup(canvas2);
+	paper3.setup(canvas3);
 
 
 	//alpha max is 200 = 0.78% de alpah
@@ -59,24 +65,10 @@ window.onload = function() {
 	var pointsLayers = k_combinations([0,1,2,3,4,5],3);
 	
 
-    var fileNames = ["FS_Letters", "FS_Security", "FS_Learning", "FS_Insurance", "FS_Entertainment","FS_Company","FS_Assistance"];
+    var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
 
-     //alpha max is 200 = 0.78% de alpah
-     //min triangules is 5
+   	var symDist = {"V":[0.1, 1.15], "H":[1, 0.25]};
 	
-//	paper2.activate();
-//	
-//	for(var i in fileNames){
-//            
-//             paper2.project.importSVG("includes/images/"+ fileNames[i]+ ".svg", {
-//                                                       expandShapes: true,
-//                                                       onLoad: function(node, item) {
-//															var p = new paper2.Path();
-//														    p = item;
-//                                                       }
-//             });
-//     }
-//	
 	tool = new paper1.Tool();
 
 
@@ -88,30 +80,81 @@ window.onload = function() {
 
 	
 	$("#salvar").on('click', function () {
-		   paper2.activate();
+		   paper3.activate();
 		   downloadAsSVG();
+    });
+
+	var embedDirRadio = $('input[name=posicao-embed]');
+	var selectedEmbed = $('#fs-type-embed');
+	
+	var saveDirRadio = $('input[name=posicao-download]');
+	var selectedSave = $('#fs-type-save');
+	
+	$("#gerar-aleatorio").on('click', function () {
+			simbolGen(paper2);
+			loadSVG(paper3, paper2);
+		
     });
 	
 	
-	$("#gerar-aleatorio").on('click', function () {
-			var px0 = paper2.view.center.x;
-			var py0 = paper2.view.center.y;
-			paper2.project.activeLayer.removeChildren();
+	
+	$("#gerar-aleatorio").trigger("click"); //first click random in the beginning
+	
+	saveDirRadio.on('change', function(){
+		loadSVG(paper3, paper2);
+	});
+	selectedSave.on('change', function(){
+		loadSVG(paper3, paper2);
+	});
+
+	function simbolGen(scope){
+		
+			var px0 = scope.view.center.x;
+			var py0 = scope.view.center.y;
+			scope.project.activeLayer.removeChildren();
 		
 			var nLayerR = random(MIN_LAYER, MAX_LAYER);
 			var alphaR = MIN_ALPHA + Math.random() * (MAX_ALPHA-MIN_ALPHA);
-			drawHexagons(px0, py0, paper2.view.size.width*(2-Math.sqrt(3)/2), nLayerR, alphaR);
+			drawHexagons(px0, py0, scope.view.size.width*(2-Math.sqrt(3)/2), nLayerR, alphaR);
 		
-//			for(var i=0; i< 10; i++){
-//				for(var j=0; j < 4; j++){
-//					drawHexagons(25 + i*55,
-//								 25+j*55, 50,
-//								 MIN_LAYER + j*(MAX_LAYER-MIN_LAYER)/4,
-//								 MIN_ALPHA + (10-i)*(MAX_ALPHA-MIN_ALPHA)/10);
-//				}
-//			}
-    });
+
+	}
 	
+	function loadSVG(scope, toCopy){
+		
+			toCopy.activate();
+			var dataJSON = toCopy.project.exportJSON();	
+		
+			scope.activate();
+			scope.project.clear();
+			var p = scope.project.importJSON(dataJSON);
+			var globalW = 58.96;
+			p[0].fitBounds(new scope.Rectangle(0,0, globalW, globalW));
+			p[0].bounds.x = scope.view.bounds.x;
+			p[0].bounds.y = scope.view.bounds.y;
+			
+			var fName = selectedSave.val();
+			if(fName !== ""){
+				scope.project.importSVG("includes/images/"+ fName + ".svg", 
+									 					{ expandShapes: false,
+													      onLoad: function (item){
+															  var dir = saveDirRadio.filter(':checked').data("dir");
+															  
+																 item.bounds.x =  p[0].bounds.x + globalW * symDist[dir][0];
+																 item.bounds.y =  p[0].bounds.y + globalW * symDist[dir][1];
+															  
+															  	 scope.view.viewSize = scope.project.activeLayer.bounds;
+															  	 scope.view.update();	
+
+
+															}
+				});
+			}
+			scope.view.viewSize = scope.project.activeLayer.bounds;
+			scope.view.update();	
+	}
+	
+
 	function drawHexagons(px,py,w, maxlayer, maxalpha){
 			paper2.activate();
 			path2 = [];	
@@ -119,10 +162,10 @@ window.onload = function() {
 			var rState = 0;
 			for(var i=0; i < maxlayer; i++){
 				var ind = randPos[random(randPos.length)];
-				while( pointsLayers[ind].indexOf(rState) === -1 && !(rState === -1)){
+				while( pointsLayers[ind].indexOf(rState) === -1 && (rState !== -1)){
 					ind = randPos[random(randPos.length)];
 				}
-				rState = (rState == 0)? 3: -1;
+				rState = (rState === 0)? 3: -1;
 				
 				randPos.splice(ind,1);
 

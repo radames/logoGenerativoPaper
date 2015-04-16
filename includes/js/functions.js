@@ -12,4 +12,5 @@ $(document).ready(function(){
 		$("#embed-code").hide();
 		$(".embed-code").show(200);
 	});
+	
 })

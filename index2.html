@@ -43,13 +43,13 @@
 						<h3>embed code</h3>
 
 						<span class="radio-content">
-							<input type="radio" name="posicao" id="horizontal" checked>
+							<input type="radio" name="posicao-embed" id="horizontal" data-dir="H" checked>
 							<label for="horizontal"><span></span></label>
 						</span>
 						<label for="horizontal" class="horizontal">horizontal</label>
 
 						<span class="radio-content">
-							<input type="radio" name="posicao" id="vertical">
+							<input type="radio" name="posicao-embed" id="vertical" data-dir="V">
 							<label for="vertical"><span></span></label>
 						</span>
 						<label for="vertical" class="vertical">vertical</label>
@@ -62,15 +62,15 @@
 						</div>
 
 						<div class="select-content">
-							<select name="fs-type">
-								<option value="fs">FS</option>
+							<select id="fs-type-embed" name="fs-type">
+								<option value="fs" data-name ="FS_Letters">FS</option>
 								<option value="fs-company">FS Company</option>
 								<option value="fs-entertainment">FS Entertainment</option>
 								<option value="fs-learning">FS Learning</option>
 								<option value="fs-security">FS Security</option>
 								<option value="fs-insurance">FS Insurance</option>
 								<option value="fs-assistance">FS Assistance</option>
-								<option value="apenas-simbolo">Apenas o símbolo</option>
+								<option value="">Apenas o símbolo</option>
 							</select>
 						</div>
 
@@ -94,38 +94,35 @@
 				<h2>Vai imprimir?</h2>
 				<p>Então faça o download do símbolo (.svg)</p>
 
-				<form action="#" method="post">
 					<span class="radio-content">
-						<input type="radio" name="posicao" id="horizontal-gerado">
+						<input type="radio" name="posicao-download" id="horizontal-gerado" data-dir="H" checked>
 						<label for="horizontal-gerado"><span></span></label>
 					</span>
 					<label for="horizontal-gerado" class="horizontal">horizontal</label>
 
 					<span class="radio-content">
-						<input type="radio" name="posicao" id="vertical-gerado">
+						<input type="radio" name="posicao-download" id="vertical-gerado"  data-dir="V">
 						<label for="vertical-gerado"><span></span></label>
 					</span>
 					<label for="vertical-gerado" class="vertical">vertical</label>
 
 					<div class="select-content">
-						<select name="fs-type">
-							<option value="fs">FS</option>
+						<select id="fs-type-save" name="fs-type">
+							<option value="fs" selected>FS</option>
 							<option value="fs-company">FS Company</option>
 							<option value="fs-entertainment">FS Entertainment</option>
 							<option value="fs-learning">FS Learning</option>
 							<option value="fs-security">FS Security</option>
 							<option value="fs-insurance">FS Insurance</option>
 							<option value="fs-assistance">FS Assistance</option>
-							<option value="apenas-simbolo">Apenas o símbolo</option>
+							<option value="">Apenas o símbolo</option>
 						</select>
 					</div>
 
 					<p class="visualizando">Visualizando</p>
+					<canvas id="finalCanvas" width="210px" height="150px"></canvas>
 
-					<img src="includes/images/gerado-view.jpg" alt="" />
-
-					<button class="button salvar">salvar</button>
-				</form>
+					<button id ="salvar" class="button salvar">salvar</button>
   			</div>
   		</section>
 	</body>
