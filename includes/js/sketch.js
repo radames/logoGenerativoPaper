@@ -67,7 +67,7 @@ window.onload = function() {
 
     var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
 
-   	var symDist = {"V":[0.1, 1.15], "H":[1, 0.25]};
+   	var symDist = {"V":[0.1, 1.15], "H":[1.1, 0.25]};
 	
 	tool = new paper1.Tool();
 
