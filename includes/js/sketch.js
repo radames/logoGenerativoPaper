@@ -117,13 +117,18 @@ window.onload = function() {
 	
 	$("#gerar-nome").on('click', function () {
 			var nameCol = $("#nome-colaborador").val();
-		    nameCol = noAccents(nameCol); // remove all accents
+			nameCol = noAccents(nameCol); // remove all accents
 			nameCol = nameCol.replace(/ /g,''); // clean all white spaces
 		
 			simbolFromName(paper2, nameCol);
 			loadSVG(paper3, paper2);
-
     });
+	
+	$("#nome-colaborador").keyup(function(event){
+    	if(event.keyCode == 13){
+       		 $("#gerar-nome").click();
+    	}
+	});	
 	
 	function simbolFromName(scope, name){
 		
