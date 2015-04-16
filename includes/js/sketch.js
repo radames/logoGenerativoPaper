@@ -48,6 +48,7 @@ window.onload = function() {
 
 	var paper1 = new paper.PaperScope();
 	var paper2 = new paper.PaperScope();
+	
 	paper1.setup(canvas);
 	paper2.setup(canvas2);
 
@@ -55,41 +56,27 @@ window.onload = function() {
 	//alpha max is 200 = 0.78% de alpah
 	//min triangules is 5
 	
-	var tmpLayers = k_combinations([0,1,2,3,4,5],3);
-	
-	for(var i = 0; i < tmpLayers.length; i++){
-		if(tmpLayers[i].indexOf(0) != -1  || tmpLayers[i].indexOf(3) != -1){
-			pointsLayers.push(tmpLayers[i]);
-		}
-	}
+	var pointsLayers = k_combinations([0,1,2,3,4,5],3);
 	
 
-        var fileNames = ["FS_Letters", "FS_Security", "FS_Learning", "FS_Insurance", "FS_Entertainment","FS_Company","FS_Assistance"];
+    var fileNames = ["FS_Letters", "FS_Security", "FS_Learning", "FS_Insurance", "FS_Entertainment","FS_Company","FS_Assistance"];
 
--       //alpha max is 200 = 0.78% de alpah
--       //min triangules is 5
-
--       var tmpLayers = k_combinations([0,1,2,3,4,5],3);
-+//     var svgsGroup = new paper1.Group();
-+//     for(var i in fileNames){
-+//             //loading all svgs in the group
-+//             var p = new paper1.Path();
-+//             p.name =  fileNames[i];
-+//
-+//             paper1.project.importSVG("includes/images/"+ fileNames[i]+ ".svg", {
-+//                                                       expandShapes: true,
-+//                                                       onLoad: function(node, item) {
-+//                                                               p.project.activeLayer.addChild(node);
-+//                                                       }
-+//
-+//             });
-+//             p.position = new paper1.Point(100,100);
-+//             p.visible = true;
-+//             svgsGroup.addChild(p);
-+//
-+//     }
+     //alpha max is 200 = 0.78% de alpah
+     //min triangules is 5
 	
-	
+//	paper2.activate();
+//	
+//	for(var i in fileNames){
+//            
+//             paper2.project.importSVG("includes/images/"+ fileNames[i]+ ".svg", {
+//                                                       expandShapes: true,
+//                                                       onLoad: function(node, item) {
+//															var p = new paper2.Path();
+//														    p = item;
+//                                                       }
+//             });
+//     }
+//	
 	tool = new paper1.Tool();
 
 
@@ -105,27 +92,38 @@ window.onload = function() {
 		   downloadAsSVG();
     });
 	
-	$("#gerar").on('click', function () {
+	
+	$("#gerar-aleatorio").on('click', function () {
 			var px0 = paper2.view.center.x;
 			var py0 = paper2.view.center.y;
 			paper2.project.activeLayer.removeChildren();
 		
-			for(var i=0; i< 10; i++){
-				for(var j=0; j < 4; j++){
-					drawHexagons(25 + i*55,
-								 25+j*55, 50,
-								 MIN_LAYER + j*(MAX_LAYER-MIN_LAYER)/4,
-								 MIN_ALPHA + (10-i)*(MAX_ALPHA-MIN_ALPHA)/10);
-				}
-			}
+			var nLayerR = random(MIN_LAYER, MAX_LAYER);
+			var alphaR = MIN_ALPHA + Math.random() * (MAX_ALPHA-MIN_ALPHA);
+			drawHexagons(px0, py0, paper2.view.size.width*(2-Math.sqrt(3)/2), nLayerR, alphaR);
+		
+//			for(var i=0; i< 10; i++){
+//				for(var j=0; j < 4; j++){
+//					drawHexagons(25 + i*55,
+//								 25+j*55, 50,
+//								 MIN_LAYER + j*(MAX_LAYER-MIN_LAYER)/4,
+//								 MIN_ALPHA + (10-i)*(MAX_ALPHA-MIN_ALPHA)/10);
+//				}
+//			}
     });
 	
 	function drawHexagons(px,py,w, maxlayer, maxalpha){
 			paper2.activate();
 			path2 = [];	
 			var randPos = range(pointsLayers.length);
+			var rState = 0;
 			for(var i=0; i < maxlayer; i++){
 				var ind = randPos[random(randPos.length)];
+				while( pointsLayers[ind].indexOf(rState) === -1 && !(rState === -1)){
+					ind = randPos[random(randPos.length)];
+				}
+				rState = (rState == 0)? 3: -1;
+				
 				randPos.splice(ind,1);
 
 				paths2.push( drawTriangle(paper2,
@@ -172,7 +170,7 @@ window.onload = function() {
 											 dAlpha,
 											 paper1.view.center.x,
 											 paper1.view.center.y,
-											 paper1.view.size.width));
+											 paper1.view.size.width*(2-Math.sqrt(3)/2)));
 
 					nLayer--;
 					lastTime = millis();
@@ -229,7 +227,7 @@ window.onload = function() {
 												 dAlpha,
 												 paper1.view.center.x,
 												 paper1.view.center.y,
-												 paper1.view.size.width));
+												 paper1.view.size.width*(2-Math.sqrt(3)/2)));
 					}
 					
 
