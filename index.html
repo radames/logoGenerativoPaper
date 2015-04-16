@@ -1,60 +1,127 @@
-<html>
-<head>
-	<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.js"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.22/paper-full.min.js"></script>
-	<script type="text/javascript" src="/includes/js/utils.js"></script>
-	<script type="text/javascript" src="/includes/js/sketch.js"></script>
-
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	<style>
-		html, body {
-			overflow: hidden;
-			margin: 0;
-			padding: 0;
-			background:white;
-		}
-		@media all and (min-heigth: 801px) {
-			iframe {
-				heigth: 1500px;
-			}
-		}
+<!DOCTYPE html>
+<html data-country="br" lang="pt-BR">
+	<head>
+		<title>FS - Gerador de Símbolo</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, minimum-scale=1, width=device-width">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		
-		.btn-group-vertical > button{
-			margin-bottom:10px;
-			border-radius:10px !important;
-		}
-	</style> <!-- this line removes any default padding -->
-</head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="includes/js/functions.js" type="text/javascript"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.22/paper-full.min.js"></script>
+		<script type="text/javascript" src="includes/js/utils.js"></script>
+		<script type="text/javascript" src="includes/js/sketch.js"></script>
+		
+		<link href="includes/css/style.css"  media="screen, projection" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+  		<header>
+  			<div class="content">
+	  			<h1><a href="index.html">FS</a></h1>
+	  			<p>Olá Marcelo Pena Costa</p>
+	  			<a href="#" class="logout">logout</a>
 
-<body>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-10">
-				<canvas id="logoCanvas0" width="50px" height="50px"></canvas>
-				<svg id="sir" height="50" width="50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-				  <image x="0" y="5" height="40px" width="40px"  xlink:href="fs-logo.svg"/>
-				</svg>
-			</div>
-		</div>
-		<div class="row">
+	  			<div class="right">
+		  			<h2>Gerador de Símbolo</h2>
+		  			<span>Crie seu próprio símbolo FS</span>
+	  			</div>
+  			</div>
+  		</header>
 
-			<div class="col-md-10 col-md-offset-1">
-				<div class="col-md-6">
-					<div style="left: 50%; margin-top:100px;">
-						<div class="btn-group-vertical" >
-							<button id="gerar" type="button" class="btn btn-default">GERAR</button>
-							<button id="salvar" type="button" class="btn btn-default">SALVAR</button>
+  		<section class="content" id="home">
+  			<div class="criar-logo">
+  				<div class="left">
+					<div><canvas id="logoCanvas1" width="208px" height="240px"></canvas></div>
+  					<a id="gerar-aleatorio" class="button">Gerar Aleatório</a>
+  				</div>
+				<div class="right">
+					<h2>Dinâmico</h2>
+					<a href="#" class="button embed-code">EMBED CODE</a>
+					<a href="javascript:;" class="fechar" style="display: none">fechar</a>
+					
+					<div id="embed-code" style="display:none">
+						<h3>embed code</h3>
+
+						<span class="radio-content">
+							<input type="radio" name="posicao-embed" id="horizontal" data-dir="H" checked>
+							<label for="horizontal"><span></span></label>
+						</span>
+						<label for="horizontal" class="horizontal">horizontal</label>
+
+						<span class="radio-content">
+							<input type="radio" name="posicao-embed" id="vertical" data-dir="V">
+							<label for="vertical"><span></span></label>
+						</span>
+						<label for="vertical" class="vertical">vertical</label>
+
+						<div class="tamanho-logo">
+							<p>Tamanho do logo</p>
+							<input type="text" value="100" />
+							<span>x</span>
+							<input type="text" value="100" />
 						</div>
+
+						<div class="select-content">
+							<select id="fs-type-embed" name="fs-type">
+								<option value="fs" data-name ="FS_Letters">FS</option>
+								<option value="fs-company">FS Company</option>
+								<option value="fs-entertainment">FS Entertainment</option>
+								<option value="fs-learning">FS Learning</option>
+								<option value="fs-security">FS Security</option>
+								<option value="fs-insurance">FS Insurance</option>
+								<option value="fs-assistance">FS Assistance</option>
+								<option value="">Apenas o símbolo</option>
+							</select>
+						</div>
+
+						<input type="text" class="link-embed" value="https://www.fscompany.com/watch?v=2a01Rg2g2Z8" />
 					</div>
+
+					<h2>Estático</h2>
+					<p>
+						Crie um símbolo com base nos seus dados pessoais,<br>
+						escreva o nome do colaborador
+					</p>
+
+						<input type="text" id="nome-colaborador" name="nome-colaborador" placeholder="Nome do colaborador" class="name">
+						<button id ="gerar-nome" class="button">Gerar</button>
 				</div>
-				<div class="col-md-6">
-					<canvas id="logoCanvas1" width="600px" height="300px"></canvas>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-</body>
+  			</div>
+
+  			<div class="print-logo">
+				<h2>Vai imprimir?</h2>
+				<p>Então faça o download do símbolo (.svg)</p>
+
+					<span class="radio-content">
+						<input type="radio" name="posicao-download" id="horizontal-gerado" data-dir="H" checked>
+						<label for="horizontal-gerado"><span></span></label>
+					</span>
+					<label for="horizontal-gerado" class="horizontal">horizontal</label>
+
+					<span class="radio-content">
+						<input type="radio" name="posicao-download" id="vertical-gerado"  data-dir="V">
+						<label for="vertical-gerado"><span></span></label>
+					</span>
+					<label for="vertical-gerado" class="vertical">vertical</label>
+
+					<div class="select-content">
+						<select id="fs-type-save" name="fs-type">
+							<option value="fs" selected>FS</option>
+							<option value="fs-company">FS Company</option>
+							<option value="fs-entertainment">FS Entertainment</option>
+							<option value="fs-learning">FS Learning</option>
+							<option value="fs-security">FS Security</option>
+							<option value="fs-insurance">FS Insurance</option>
+							<option value="fs-assistance">FS Assistance</option>
+							<option value="">Apenas o símbolo</option>
+						</select>
+					</div>
+
+					<p class="visualizando">Visualizando</p>
+					<canvas id="finalCanvas" width="210px" height="150px"></canvas>
+
+					<button id ="salvar" class="button salvar">salvar</button>
+  			</div>
+  		</section>
+	</body>
 </html>
