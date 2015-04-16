@@ -8,7 +8,7 @@
 
 var MAX_LAYER = 10;
 var MIN_LAYER = 4;
-var MIN_ALPHA = 0.3;
+var MIN_ALPHA = 0.2;
 var MAX_ALPHA = 0.8;
 
 	//alpha max is 200 = 0.78% de alpah
@@ -101,21 +101,47 @@ window.onload = function() {
 	$("#gerar-aleatorio").trigger("click"); //first click random in the beginning
 	
 	saveDirRadio.on('change', function(){
+
+	});
+	selectedEmbed.on('change', function(){
+
+	});
+
+	saveDirRadio.on('change', function(){
 		loadSVG(paper3, paper2);
 	});
 	selectedSave.on('change', function(){
 		loadSVG(paper3, paper2);
 	});
+	
+	
+	$("#gerar-nome").on('click', function () {
+			var nameCol = $("#nome-colaborador").val();
+		    nameCol = noAccents(nameCol); // remove all accents
+			nameCol = nameCol.replace(/ /g,''); // clean all white spaces
+		
+			simbolFromName(paper2, nameCol);
+			loadSVG(paper3, paper2);
 
+    });
+	
+	function simbolFromName(scope, name){
+		
+			var px0 = scope.view.center.x;
+			var py0 = scope.view.center.y;
+			scope.project.clear();		
+		
+			drawHexagons(scope, px0, py0, scope.view.size.width*(2-Math.sqrt(3)/2), name);
+		
+		
+	}
+	
 	function simbolGen(scope){
 		
 			var px0 = scope.view.center.x;
 			var py0 = scope.view.center.y;
-			scope.project.activeLayer.removeChildren();
-		
-			var nLayerR = random(MIN_LAYER, MAX_LAYER);
-			var alphaR = MIN_ALPHA + Math.random() * (MAX_ALPHA-MIN_ALPHA);
-			drawHexagons(px0, py0, scope.view.size.width*(2-Math.sqrt(3)/2), nLayerR, alphaR);
+			scope.project.clear();		
+			drawHexagons(scope, px0, py0, scope.view.size.width*(2-Math.sqrt(3)/2));
 		
 
 	}
@@ -154,30 +180,72 @@ window.onload = function() {
 			scope.view.update();	
 	}
 	
-
-	function drawHexagons(px,py,w, maxlayer, maxalpha){
-			paper2.activate();
-			path2 = [];	
+	function drawHexagons(scope,px, py,w, name){
+			scope.activate();
+			path2 = [];
+		
+	
 			var randPos = range(pointsLayers.length);
-			var rState = 0;
-			for(var i=0; i < maxlayer; i++){
-				var ind = randPos[random(randPos.length)];
-				while( pointsLayers[ind].indexOf(rState) === -1 && (rState !== -1)){
-					ind = randPos[random(randPos.length)];
-				}
-				rState = (rState === 0)? 3: -1;
-				
-				randPos.splice(ind,1);
+			if(name == undefined || name === ""){
+				//random if names is undefined	
+				var maxlayer = random(MIN_LAYER, MAX_LAYER);
+				var maxalpha = MIN_ALPHA + Math.random()*(MAX_ALPHA-MIN_ALPHA);
 
-				paths2.push( drawTriangle(paper2,
-										  pointsLayers[ind],
-										  i,
-										  maxalpha,
-										  px,
-										  py,
-										  w));
+				var rState = 0;
+		
+				for(var i=0; i < maxlayer; i++){
+					var ind = randPos[random(randPos.length)];
+					while( pointsLayers[ind].indexOf(rState) === -1 && (rState !== -1)){
+						ind = randPos[random(randPos.length)];
+					}
+					rState = (rState === 0)? 3: -1;
+
+					randPos.splice(ind,1);
+
+					paths2.push( drawTriangle(scope,
+											  pointsLayers[ind],
+											  i,
+											  maxalpha,
+											  px,
+											  py,
+											  w));
+				}
+	
+				
+			}else{
+				
+				var rState = 0;
+				var maxLayer = MIN_LAYER + name.length % (MAX_LAYER - MIN_LAYER); // constrain the maxLayer based on the random maxLayer
+				var maxalpha = MIN_ALPHA + (maxLayer/MAX_LAYER)*(MAX_ALPHA - MIN_ALPHA);
+				
+				for(var i=0; i < maxLayer; i++){
+					var l = name[i % name.length];
+					
+					
+					var ind = l.charCodeAt(0) % randPos.length;
+					
+					while( pointsLayers[ind].indexOf(rState) === -1 && (rState !== -1)){
+						ind = randPos[random(randPos.length)];
+					}
+					rState = (rState === 0)? 3: -1;
+
+					randPos.splice(ind,1);
+
+					paths2.push( drawTriangle(scope,
+											  pointsLayers[ind],
+											  i,
+											  maxalpha,
+											  px,
+											  py,
+											  w));
+				}
+				
+	
 			}
-			paper2.view.update();
+		
+
+
+			scope.view.update();
 
 	}
 	
@@ -191,11 +259,6 @@ window.onload = function() {
 				sState = STATE.ANIMA;
 				nLayer = random(MIN_LAYER, MAX_LAYER);
 				
-//				var px0 = paper2.view.center.x;
-//				var py0 = paper2.view.center.y;
-//
-//				drawHexagons(px0, py0, 200);
-//				
 				lastTime = millis();
 				break;
 
