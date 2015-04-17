@@ -95,9 +95,6 @@ window.onload = function() {
 	var pointsLayers = k_combinations([0,1,2,3,4,5],3);
 	
 
-
-
-	
 	function loadSVG(scope, gWidth, fName, pos){
 		if(fName !== ""){
 				scope.project.importSVG("includes/images/"+ fName + ".svg", 

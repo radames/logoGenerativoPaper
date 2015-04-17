@@ -119,7 +119,7 @@ window.onload = function() {
 		var fName = selectedEmbed.val();
 		var lWidth = logoWidth.val();
 		
-		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&dir=" + dir
+		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir
 
 	}
 	
