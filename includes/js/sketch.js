@@ -68,7 +68,15 @@ window.onload = function() {
     var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
 
    	var symDist = {"V":[0.1, 1.15], "H":[1.1, 0.25]};
-	
+	var symWidths = {"V" : {"fs" : 0.839,
+					 	   "fs-company": 1.923},
+					 "H" : {"fs" : 0.92,
+							"fs-security":2.08, 
+							"fs-learning": 2.11,
+							"fs-insurance": 2.38,
+							"fs-entertainment": 3.38,
+							"fs-company": 2.07,
+							"fs-assistance": 2.56}};
 	tool = new paper1.Tool();
 
 
@@ -170,7 +178,12 @@ window.onload = function() {
 									 					{ expandShapes: false,
 													      onLoad: function (item){
 															  var dir = saveDirRadio.filter(':checked').data("dir");
-															  
+
+															  	 var scale = item.bounds.width;
+															  	 item.bounds.width = symWidths[dir][fName] * globalW;
+															     scale = scale / item.bounds.width; 
+															  	 item.bounds.height = item.bounds.height * (2-scale);
+
 																 item.bounds.x =  p[0].bounds.x + globalW * symDist[dir][0];
 																 item.bounds.y =  p[0].bounds.y + globalW * symDist[dir][1];
 															  

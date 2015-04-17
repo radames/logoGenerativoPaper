@@ -29,20 +29,20 @@ $(document).ready(function(){
 		$("#fs-type-save option[value*='fs-insurance']").show();
 	});
 	
-		$("#vertical-gerado").click(function(){
-		$("#fs-type-save option[value*='fs-entertainment']").hide();		
-		$("#fs-type-save option[value*='fs-learning']").hide();		
-		$("#fs-type-save option[value*='fs-security']").hide();			
-		$("#fs-type-save option[value*='fs-assistance']").hide();			
-		$("#fs-type-save option[value*='fs-insurance']").hide();
+	$("#vertical").click(function(){
+		$("#fs-type-embed option[value*='fs-entertainment']").hide();		
+		$("#fs-type-embed option[value*='fs-learning']").hide();		
+		$("#fs-type-embed option[value*='fs-security']").hide();			
+		$("#fs-type-embed option[value*='fs-assistance']").hide();			
+		$("#fs-type-embed option[value*='fs-insurance']").hide();
 	});
 								
-	$("#horizontal-gerado").click(function(){
-		$("#fs-type-save option[value*='fs-entertainment']").show();
-		$("#fs-type-save option[value*='fs-learning']").show();
-		$("#fs-type-save option[value*='fs-security']").show();
-		$("#fs-type-save option[value*='fs-assistance']").show();
-		$("#fs-type-save option[value*='fs-insurance']").show();
+	$("#horizontal").click(function(){
+		$("#fs-type-embed option[value*='fs-entertainment']").show();
+		$("#fs-type-embed option[value*='fs-learning']").show();
+		$("#fs-type-embed option[value*='fs-security']").show();
+		$("#fs-type-embed option[value*='fs-assistance']").show();
+		$("#fs-type-embed option[value*='fs-insurance']").show();
 	});
 	
 	
