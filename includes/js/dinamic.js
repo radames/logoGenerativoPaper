@@ -28,6 +28,16 @@ var STATE = {
 };
 
 var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
+var symDist = {"V":[0.1, 1.15], "H":[1.1, 0.25]};
+var symWidths = {"V" : {"fs" : 0.839,
+					 	   "fs-company": 1.923},
+					 "H" : {"fs" : 0.92,
+							"fs-security":2.08, 
+							"fs-learning": 2.11,
+							"fs-insurance": 2.38,
+							"fs-entertainment": 3.38,
+							"fs-company": 2.07,
+							"fs-assistance": 2.56}};
 
 
 var sState = STATE.RAND;
@@ -42,12 +52,11 @@ window.onload = function() {
 	
 	
 	var parameters = getUrlVars(); //which leads to:
-	console.log(parameters); //Writes 'value1' to console
 	
 	var gWidth = 70;
 	
 	var fName = "";
-	var dir = "V";
+	var pos = "H";
 	
 	// parsing..
 	if(parameters.width !== undefined){
@@ -57,8 +66,8 @@ window.onload = function() {
 	if(parameters.type !== undefined && fileNames.indexOf(parameters.type) !== -1){
 		fName = parameters.type;
 	}
-	if(parameters.dir !== undefined && ( parameters.dir === "V" || parameters.dir === "H")  ){
-		dir = parameters.dir; 
+	if(parameters.pos !== undefined && ( parameters.pos === "V" || parameters.pos === "H")  ){
+		pos = parameters.pos; 
 	}
 	
 	
@@ -78,7 +87,7 @@ window.onload = function() {
 	paper1.setup(canvas);
 	paper1.view.viewSize = [gWidth*Math.sqrt(3)/2, gWidth];
 	
-	loadSVG(paper1, gWidth, fName, dir);
+	loadSVG(paper1, gWidth, fName, pos);
 
 	//alpha max is 200 = 0.78% de alpah
 	//min triangules is 5
@@ -87,34 +96,27 @@ window.onload = function() {
 	
 
 
-   	var symDist = {"V":[0.1, 1.15], "H":[1.1, 0.25]};
-	var symWidths = {"V" : {"fs" : 0.839,
-					 	   "fs-company": 1.923},
-					 "H" : {"fs" : 0.92,
-							"fs-security":2.08, 
-							"fs-learning": 2.11,
-							"fs-insurance": 2.38,
-							"fs-entertainment": 3.38,
-							"fs-company": 2.07,
-							"fs-assistance": 2.56}};
 
 	
-	function loadSVG(scope, gWidth, fName, dir){
-			
-			if(fName !== ""){
+	function loadSVG(scope, gWidth, fName, pos){
+		if(fName !== ""){
 				scope.project.importSVG("includes/images/"+ fName + ".svg", 
 									 					{ expandShapes: false,
 													      onLoad: function (item){
-															  	 var scale = item.bounds.width;															  
-															  	 item.bounds.width = symWidths[dir][fName] * gWidth;
+															  	 var scale = item.bounds.width;															  									
+															  	 item.bounds.width = symWidths[pos][fName] * gWidth;
 															     scale = item.bounds.width/scale; 
-
 															     item.bounds.height = item.bounds.height * (scale);
 															  
-																 item.bounds.x =  gWidth * symDist[dir][0];
-																 item.bounds.y =  gWidth * symDist[dir][1];
-															 	 //scope.view.viewSize = scope.project.activeLayer.bounds;
-
+																 item.bounds.x =  gWidth * symDist[pos][0];
+																 item.bounds.y =  gWidth * symDist[pos][1];
+															  
+															 	 scope.view.viewSize = [scope.view.bounds.width +
+																						item.bounds.width + 
+																						item.bounds.x ,
+																						scope.view.bounds.height +
+																						item.bounds.height +
+																						item.bounds.y];
 																 scope.view.update();	
 
 															}
@@ -122,7 +124,7 @@ window.onload = function() {
 			}
 			
 			//scope.view.viewSize = scope.project.activeLayer.bounds;
-			scope.view.update();	
+			//scope.view.update();	
 	}
 	
 	
