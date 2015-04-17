@@ -44,7 +44,5 @@ $(document).ready(function(){
 		$("#fs-type-embed option[value*='fs-assistance']").show();
 		$("#fs-type-embed option[value*='fs-insurance']").show();
 	});
-	
-	
-	
+
 });

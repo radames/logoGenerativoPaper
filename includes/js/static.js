@@ -84,7 +84,8 @@ window.onload = function() {
 
 	var embedDirRadio = $('input[name=posicao-embed]');
 	var selectedEmbed = $('#fs-type-embed');
-	
+	var logoWidth = $("#logoWidth");
+
 	var saveDirRadio = $('input[name=posicao-download]');
 	var selectedSave = $('#fs-type-save');
 	
@@ -94,17 +95,34 @@ window.onload = function() {
 		
     });
 	
-	
-	
 	$("#gerar-aleatorio").trigger("click"); //first click random in the beginning
 	
-	saveDirRadio.on('change', function(){
+	
+	$("#embed-result").val(getEmbedURL());
+
+	embedDirRadio.on('change', function(){
+			$("#embed-result").val(getEmbedURL());
 
 	});
 	selectedEmbed.on('change', function(){
-
+			$("#embed-result").val(getEmbedURL());
+	});
+	logoWidth.on('change', function(){
+			$("#embed-result").val(getEmbedURL());
 	});
 
+	function getEmbedURL(){
+		var localURL = $(location).attr('href');
+		localURL = localURL.trim();
+		localURL = localURL.replace(/#/, '');
+		var dir = embedDirRadio.filter(':checked').data("dir");
+		var fName = selectedEmbed.val();
+		var lWidth = logoWidth.val();
+		
+		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&dir=" + dir
+
+	}
+	
 	saveDirRadio.on('change', function(){
 		loadSVG(paper3, paper2);
 	});
@@ -112,6 +130,7 @@ window.onload = function() {
 		loadSVG(paper3, paper2);
 	});
 	
+
 	
 	$("#gerar-nome").on('click', function () {
 			var nameCol = $("#nome-colaborador").val();
