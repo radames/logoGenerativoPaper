@@ -27,6 +27,9 @@ var STATE = {
 	CICLE: 3,
 };
 
+var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
+
+
 var sState = STATE.RAND;
 
 var nLayer, pointsList;
@@ -36,28 +39,46 @@ var dAlpha;
 var tool;
 
 window.onload = function() {
+	
+	
+	var parameters = getUrlVars(); //which leads to:
+	console.log(parameters); //Writes 'value1' to console
+	
+	var gWidth = 70;
+	
+	var fName = "";
+	var dir = "V";
+	
+	// parsing..
+	if(parameters.width !== undefined){
+		gWidth = parameters.width;
+	}
+
+	if(parameters.type !== undefined && fileNames.indexOf(parameters.type) !== -1){
+		fName = parameters.type;
+	}
+	if(parameters.dir !== undefined && ( parameters.dir === "V" || parameters.dir === "H")  ){
+		dir = parameters.dir; 
+	}
+	
+	
 	var pointsLayers = [];
 	var paths = [];
 	var paths2 = [];
 	
-	var mouseX;
-	var mouseY;
+  
 
 	firstMillis = new Date().getTime();
 		// Get a reference to the canvas object
 
 	var canvas = document.getElementById('logoCanvas0');
-	var canvas2 = document.getElementById('logoCanvas1');
-	var canvas3 = document.getElementById('finalCanvas');
 	
 	var paper1 = new paper.PaperScope();
-	var paper2 = new paper.PaperScope();
-	var paper3 = new paper.PaperScope();
-
+	
 	paper1.setup(canvas);
-	paper2.setup(canvas2);
-	paper3.setup(canvas3);
-
+	paper1.view.viewSize = [gWidth*Math.sqrt(3)/2, gWidth];
+	
+	loadSVG(paper1, gWidth, fName, dir);
 
 	//alpha max is 200 = 0.78% de alpah
 	//min triangules is 5
@@ -65,7 +86,6 @@ window.onload = function() {
 	var pointsLayers = k_combinations([0,1,2,3,4,5],3);
 	
 
-    var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
 
    	var symDist = {"V":[0.1, 1.15], "H":[1.1, 0.25]};
 	var symWidths = {"V" : {"fs" : 0.839,
@@ -77,195 +97,34 @@ window.onload = function() {
 							"fs-entertainment": 3.38,
 							"fs-company": 2.07,
 							"fs-assistance": 2.56}};
-	tool = new paper1.Tool();
-
-
-
-	tool.onMouseMove = function (event) {
-		mouseX = event.point.x;
-		mouseY = event.point.y;
-	};	
 
 	
-	$("#salvar").on('click', function () {
-		   paper3.activate();
-		   downloadAsSVG();
-    });
-
-	var embedDirRadio = $('input[name=posicao-embed]');
-	var selectedEmbed = $('#fs-type-embed');
-	
-	var saveDirRadio = $('input[name=posicao-download]');
-	var selectedSave = $('#fs-type-save');
-	
-	$("#gerar-aleatorio").on('click', function () {
-			simbolGen(paper2);
-			loadSVG(paper3, paper2);
-		
-    });
-	
-	
-	
-	$("#gerar-aleatorio").trigger("click"); //first click random in the beginning
-	
-	saveDirRadio.on('change', function(){
-
-	});
-	selectedEmbed.on('change', function(){
-
-	});
-
-	saveDirRadio.on('change', function(){
-		loadSVG(paper3, paper2);
-	});
-	selectedSave.on('change', function(){
-		loadSVG(paper3, paper2);
-	});
-	
-	
-	$("#gerar-nome").on('click', function () {
-			var nameCol = $("#nome-colaborador").val();
-			nameCol = noAccents(nameCol); // remove all accents
-			nameCol = nameCol.replace(/ /g,''); // clean all white spaces
-		
-			simbolFromName(paper2, nameCol);
-			loadSVG(paper3, paper2);
-    });
-	
-	$("#nome-colaborador").keyup(function(event){
-    	if(event.keyCode == 13){
-       		 $("#gerar-nome").click();
-    	}
-	});	
-	
-	function simbolFromName(scope, name){
-		
-			var px0 = scope.view.center.x;
-			var py0 = scope.view.center.y;
-			scope.project.clear();		
-		
-			drawHexagons(scope, px0, py0, scope.view.size.width*(2-Math.sqrt(3)/2), name);
-		
-		
-	}
-	
-	function simbolGen(scope){
-		
-			var px0 = scope.view.center.x;
-			var py0 = scope.view.center.y;
-			scope.project.clear();		
-			drawHexagons(scope, px0, py0, scope.view.size.width*(2-Math.sqrt(3)/2));
-		
-
-	}
-	
-	function loadSVG(scope, toCopy){
-		
-			toCopy.activate();
-			var dataJSON = toCopy.project.exportJSON();	
-		
-			scope.activate();
-			scope.project.clear();
-			var p = scope.project.importJSON(dataJSON);
-			var globalW = 58.96;
-			p[0].fitBounds(new scope.Rectangle(0,0, globalW, globalW));
-			p[0].bounds.x = scope.view.bounds.x;
-			p[0].bounds.y = scope.view.bounds.y;
+	function loadSVG(scope, gWidth, fName, dir){
 			
-			var fName = selectedSave.val();
 			if(fName !== ""){
 				scope.project.importSVG("includes/images/"+ fName + ".svg", 
 									 					{ expandShapes: false,
 													      onLoad: function (item){
-															  var dir = saveDirRadio.filter(':checked').data("dir");
+															  	 var scale = item.bounds.width;															  
+															  	 item.bounds.width = symWidths[dir][fName] * gWidth;
+															     scale = item.bounds.width/scale; 
 
-															  	 var scale = item.bounds.width;
-															  	 item.bounds.width = symWidths[dir][fName] * globalW;
-															     scale = scale / item.bounds.width; 
-															  	 item.bounds.height = item.bounds.height * (2-scale);
-
-																 item.bounds.x =  p[0].bounds.x + globalW * symDist[dir][0];
-																 item.bounds.y =  p[0].bounds.y + globalW * symDist[dir][1];
+															     item.bounds.height = item.bounds.height * (scale);
 															  
-															  	 scope.view.viewSize = scope.project.activeLayer.bounds;
-															  	 scope.view.update();	
+																 item.bounds.x =  gWidth * symDist[dir][0];
+																 item.bounds.y =  gWidth * symDist[dir][1];
+															 	 //scope.view.viewSize = scope.project.activeLayer.bounds;
 
+																 scope.view.update();	
 
 															}
 				});
 			}
-			scope.view.viewSize = scope.project.activeLayer.bounds;
+			
+			//scope.view.viewSize = scope.project.activeLayer.bounds;
 			scope.view.update();	
 	}
 	
-	function drawHexagons(scope,px, py,w, name){
-			scope.activate();
-			path2 = [];
-		
-	
-			var randPos = range(pointsLayers.length);
-			if(name == undefined || name === ""){
-				//random if names is undefined	
-				var maxlayer = random(MIN_LAYER, MAX_LAYER);
-				var maxalpha = MIN_ALPHA + Math.random()*(MAX_ALPHA-MIN_ALPHA);
-
-				var rState = 0;
-		
-				for(var i=0; i < maxlayer; i++){
-					var ind = randPos[random(randPos.length)];
-					while( pointsLayers[ind].indexOf(rState) === -1 && (rState !== -1)){
-						ind = randPos[random(randPos.length)];
-					}
-					rState = (rState === 0)? 3: -1;
-
-					randPos.splice(ind,1);
-
-					paths2.push( drawTriangle(scope,
-											  pointsLayers[ind],
-											  i,
-											  maxalpha,
-											  px,
-											  py,
-											  w));
-				}
-	
-				
-			}else{
-				
-				var rState = 0;
-				var maxLayer = MIN_LAYER + name.length % (MAX_LAYER - MIN_LAYER); // constrain the maxLayer based on the random maxLayer
-				var maxalpha = MIN_ALPHA + (maxLayer/MAX_LAYER)*(MAX_ALPHA - MIN_ALPHA);
-				
-				for(var i=0; i < maxLayer; i++){
-					var l = name[i % name.length];
-					
-					
-					var ind = l.charCodeAt(0) % randPos.length;
-					
-					while( pointsLayers[ind].indexOf(rState) === -1 && (rState !== -1)){
-						ind = randPos[random(randPos.length)];
-					}
-					rState = (rState === 0)? 3: -1;
-
-					randPos.splice(ind,1);
-
-					paths2.push( drawTriangle(scope,
-											  pointsLayers[ind],
-											  i,
-											  maxalpha,
-											  px,
-											  py,
-											  w));
-				}
-				
-	
-			}
-		
-
-
-			scope.view.update();
-
-	}
 	
 	var diff, rTime;
 	paper1.view.onFrame = function(event) {
@@ -273,6 +132,8 @@ window.onload = function() {
 			case STATE.RAND:
 				
 				paper1.project.activeLayer.removeChildren();
+		
+				
 				path1 = [];	
 				sState = STATE.ANIMA;
 				nLayer = random(MIN_LAYER, MAX_LAYER);
@@ -292,9 +153,9 @@ window.onload = function() {
 											 pointsLayers[nLayer],
 											 nLayer,
 											 dAlpha,
-											 paper1.view.center.x,
-											 paper1.view.center.y,
-											 paper1.view.size.width*(2-Math.sqrt(3)/2)));
+											 Math.sqrt(3) * 0.5 * gWidth/2,
+											 gWidth/2,
+											 gWidth));
 
 					nLayer--;
 					lastTime = millis();
@@ -330,9 +191,10 @@ window.onload = function() {
 			case STATE.CICLE:
 
 				diff = millis() - lastTime;
-				rTime = 200;
+				rTime = 500;
 				if (diff > rTime) {				
-					dAlpha = MIN_ALPHA + (1-mouseX/paper2.view.size.width)*(MAX_ALPHA - MIN_ALPHA);
+					dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
+					
 					for(var i = 0; i < paths.length; i++){
 						var ind = random(paths.length);
 						paths[ind].remove();	
@@ -340,7 +202,7 @@ window.onload = function() {
 					}
 					var randPos = range(pointsLayers.length);
 					
-					for(var i = 0; i < ((mouseY/paper2.view.size.height)*(MAX_LAYER-MIN_LAYER)); i++){						
+					for(var i = 0; i < 3; i++){						
 						var ind = randPos[random(randPos.length)]; //do not take the same layer twice
 						randPos.splice(ind,1);
 	
@@ -349,9 +211,9 @@ window.onload = function() {
 												 pointsLayers[ind],
 												 ind,
 												 dAlpha,
-												 paper1.view.center.x,
-												 paper1.view.center.y,
-												 paper1.view.size.width*(2-Math.sqrt(3)/2)));
+												 Math.sqrt(3) * 0.5 * gWidth/2,
+												 gWidth/2,
+												 gWidth));
 					}
 					
 
@@ -367,25 +229,6 @@ window.onload = function() {
 
 
 };
-
-
-//currently name doesn't seem to work in some browsers.
-//Save SVG from paper.js as a file.
-var downloadAsSVG = function (fileName) {
-
-   if(!fileName) {
-	   var gTime = new Date();
-       fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + ".svg";
-   }
-
-   var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
-
-   var link = document.createElement("a");
-   link.download = fileName;
-   link.href = url;
-   link.click();
-};
-
 
 
 
