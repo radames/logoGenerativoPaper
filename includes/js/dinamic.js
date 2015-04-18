@@ -10,7 +10,7 @@ var MAX_LAYER = 10;
 var MIN_LAYER = 4;
 var MIN_ALPHA = 0.2;
 var MAX_ALPHA = 0.8;
-
+var FADE_TIME = 400;
 	//alpha max is 200 = 0.78% de alpah
     //min triangules is 5
 	
@@ -25,6 +25,8 @@ var STATE = {
     ANIMA: 1,
     GRAD: 2,
 	CICLE: 3,
+	FADEIN: 4,
+	FADEOUT: 5
 };
 
 var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
@@ -41,9 +43,6 @@ var symWidths = {"V" : {"fs" : 0.839,
 
 
 var sState = STATE.RAND;
-
-var nLayer, pointsList;
-var dAlpha;
 
 
 var tool;
@@ -71,12 +70,9 @@ window.onload = function() {
 	}
 	
 	
-	var pointsLayers = [];
+	var pointsLayers;
 	var paths = [];
-	var paths2 = [];
-	
-  
-
+	  
 	firstMillis = new Date().getTime();
 		// Get a reference to the canvas object
 
@@ -92,7 +88,7 @@ window.onload = function() {
 	//alpha max is 200 = 0.78% de alpah
 	//min triangules is 5
 	
-	var pointsLayers = k_combinations([0,1,2,3,4,5],3);
+	pointsLayers = k_combinations([0,1,2,3,4,5],3);
 	
 
 	function loadSVG(scope, gWidth, fName, pos){
@@ -125,7 +121,8 @@ window.onload = function() {
 	}
 	
 	
-	var diff, rTime;
+	var diff, rTime, rPos,indToFade, rangeLayers, dAlpha, nLayer, staticNLayer;
+	
 	paper1.view.onFrame = function(event) {
 		switch (sState) {
 			case STATE.RAND:
@@ -133,9 +130,12 @@ window.onload = function() {
 				paper1.project.activeLayer.removeChildren();
 		
 				
-				path1 = [];	
+				paths = [];	
 				sState = STATE.ANIMA;
 				nLayer = random(MIN_LAYER, MAX_LAYER);
+				staticNLayer = nLayer;
+				
+				rangeLayers = range(staticNLayer); // list to ensure not reapete layers
 				
 				lastTime = millis();
 				break;
@@ -144,10 +144,10 @@ window.onload = function() {
 
 
 				diff = millis() - lastTime;
-				rTime =100;
+				rTime =500;
 				dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
 
-				if (diff > rTime) {
+				if (diff > rTime) { 	
 					paths.push( drawTriangle(paper1,
 											 pointsLayers[nLayer],
 											 nLayer,
@@ -162,66 +162,73 @@ window.onload = function() {
 				dAlpha = MAX_ALPHA*diff/rTime;
 
 				if (nLayer <= 0) {
-					sState =  STATE.CICLE;					
+					sState =  STATE.CICLE;
+
 				}
 				break;
 			
-			case STATE.FADEOUT:
-				
-				diff = millis() - lastTime;
-				rTime = 200;
-				
 
-				if (diff > rTime) {	
-					if(paths.length  <= 0){
-						sState = STATE.RAND;
-						break;
-					}else{
-						var ind = random(paths.length);
-						paths[ind].remove();	
-						paths.splice(ind,1);
-
-					}
-					lastTime = millis();
-
-				}
-				break;
-				
 			case STATE.CICLE:
 
-				diff = millis() - lastTime;
-				rTime = 500;
-				if (diff > rTime) {				
-					dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
-					
-					for(var i = 0; i < paths.length; i++){
-						var ind = random(paths.length);
-						paths[ind].remove();	
-						paths.splice(ind,1);
-					}
-					var randPos = range(pointsLayers.length);
-					
-					for(var i = 0; i < 3; i++){						
-						var ind = randPos[random(randPos.length)]; //do not take the same layer twice
-						randPos.splice(ind,1);
-	
-						
-						paths.push( drawTriangle(paper1,
-												 pointsLayers[ind],
-												 ind,
+				indToFade  = random(paths.length); //do not take the same layer twice
+									
+//				var ind = rangeLayers[indToFade];
+//				rangeLayers.pop();
+				//rangeLayers.splice(ind,1); // delete layer maker
+				//console.log(rangeLayers.length);
+
+				dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
+				
+				var indToAdd = random(pointsLayers.length);
+				//rangeLayers.push(indToAdd);
+				//add new and hide it
+				paths.push( drawTriangle(paper1,
+												 pointsLayers[indToAdd],
+												 indToAdd,
 												 dAlpha,
 												 Math.sqrt(3) * 0.5 * gWidth/2,
 												 gWidth/2,
 												 gWidth));
-					}
-					
+				
+				//paths[paths.length-1].visible = false; //new item hide
+				
 
+				lastTime = millis();
+				
+				sState = STATE.FADEOUT;
 
-					lastTime = millis();
-
-				}
+				
 				break;
+			
+			
+			case STATE.FADEOUT:
 
+				var diffTime = millis()- lastTime;
+
+				paths[indToFade].fillColor.alpha *= (1-diffTime/FADE_TIME);
+
+				if(diffTime > FADE_TIME){
+					sState = STATE.CICLE;
+					paths[indToFade].remove();	
+					paths.splice(indToFade,1);
+					sState = STATE.CICLE;
+					//paths[paths.length-1].visible = true;
+				}
+
+			break;
+
+			case STATE.FADEIN:
+				
+				var diffTime = millis()- lastTime;
+				//paths[paths.length-1].fillColor.alpha *= (diffTime/FADE_TIME);
+
+				if(diffTime > FADE_TIME){ 
+					sState = STATE.CICLE;
+				}
+
+			break;
+
+			
 		}
 		
 	};

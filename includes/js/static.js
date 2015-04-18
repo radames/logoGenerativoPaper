@@ -119,8 +119,7 @@ window.onload = function() {
 		var fName = selectedEmbed.val();
 		var lWidth = logoWidth.val();
 		
-		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir
-
+		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir;
 	}
 	
 	saveDirRadio.on('change', function(){
@@ -209,7 +208,7 @@ window.onload = function() {
 	
 	function drawHexagons(scope,px, py,w, name){
 			scope.activate();
-			var path2 = [];
+			paths2 = [];
 		
 			var maxlayer, maxalpha, rState;
 		
