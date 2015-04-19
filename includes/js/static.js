@@ -5,7 +5,10 @@
 /* global Point:true */
 /* global view:true */
 /* global $:true */
-
+/* global random */
+/* global range */
+/* global noAccents */
+/* global k_combinations */
 
 var MAX_LAYER = 10;
 var MIN_LAYER = 4;
@@ -210,13 +213,13 @@ window.onload = function() {
 			scope.activate();
 			paths2 = [];
 		
-			var maxlayer, maxalpha, rState;
+			var rState;
 		
 			var randPos = range(pointsLayers.length);
 			if(name === undefined || name === ""){
 				//random if names is undefined	
-				maxlayer = random(MIN_LAYER, MAX_LAYER);
-				maxalpha = MIN_ALPHA + Math.random()*(MAX_ALPHA-MIN_ALPHA);
+				var maxlayer = random(MIN_LAYER, MAX_LAYER);
+				var maxalpha = MIN_ALPHA + Math.random()*(MAX_ALPHA-MIN_ALPHA);
 
 				rState = 0;
 		
@@ -241,8 +244,8 @@ window.onload = function() {
 				
 			}else{
 				
-				maxLayer = MIN_LAYER + name.length % (MAX_LAYER - MIN_LAYER); // constrain the maxLayer based on the random maxLayer
-				maxalpha = MIN_ALPHA + (maxLayer/MAX_LAYER)*(MAX_ALPHA - MIN_ALPHA);
+				var maxLayer = MIN_LAYER + name.length % (MAX_LAYER - MIN_LAYER); // constrain the maxLayer based on the random maxLayer
+				var maxalpha = MIN_ALPHA + (maxLayer/MAX_LAYER)*(MAX_ALPHA - MIN_ALPHA);
 				rState = 0;
 				
 				for(var i = 0; i < maxLayer; i++){

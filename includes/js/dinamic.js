@@ -5,12 +5,19 @@
 /* global Point:true */
 /* global view:true */
 /* global $:true */
+/* global random */
+/* global range */
+/* global noAccents */
+/* global k_combinations */
+/* global millis */
+/* global getUrlVars */
+/* global shuffle */
 
 var MAX_LAYER = 10;
 var MIN_LAYER = 4;
 var MIN_ALPHA = 0.2;
 var MAX_ALPHA = 0.8;
-var FADE_TIME = 400;
+var FADE_TIME = 200;
 	//alpha max is 200 = 0.78% de alpah
     //min triangules is 5
 	
@@ -88,7 +95,7 @@ window.onload = function() {
 	//alpha max is 200 = 0.78% de alpah
 	//min triangules is 5
 	
-	pointsLayers = k_combinations([0,1,2,3,4,5],3);
+	pointsLayers = shuffle(k_combinations([0,1,2,3,4,5],3));
 	
 
 	function loadSVG(scope, gWidth, fName, pos){
@@ -121,7 +128,7 @@ window.onload = function() {
 	}
 	
 	
-	var diff, rTime, rPos,indToFade, rangeLayers, dAlpha, nLayer, staticNLayer;
+	var diff, diffTime, rTime, rPos,indToFade, indToAdd, rangeLayers, dAlpha, nLayer, staticNLayer;
 	
 	paper1.view.onFrame = function(event) {
 		switch (sState) {
@@ -144,7 +151,7 @@ window.onload = function() {
 
 
 				diff = millis() - lastTime;
-				rTime =500;
+				rTime =10;
 				dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
 
 				if (diff > rTime) { 	
@@ -163,52 +170,44 @@ window.onload = function() {
 
 				if (nLayer <= 0) {
 					sState =  STATE.CICLE;
-
+					indToFade = 0;
+					indToAdd = 0 ;
 				}
 				break;
 			
 
 			case STATE.CICLE:
 
-				indToFade  = random(paths.length); //do not take the same layer twice
-									
-//				var ind = rangeLayers[indToFade];
-//				rangeLayers.pop();
-				//rangeLayers.splice(ind,1); // delete layer maker
-				//console.log(rangeLayers.length);
+				indToFade = (indToFade + 1) % paths.length; //ycle over paths,  0---> paths.lenght
+				indToAdd = (indToAdd + 1) % pointsLayers.length; //cycle over pointsLayer,  0---> pointsLayer.lenght
 
 				dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
+				pointsLayers = shuffle(pointsLayers);
 				
-				var indToAdd = random(pointsLayers.length);
 				//rangeLayers.push(indToAdd);
 				//add new and hide it
 				paths.push( drawTriangle(paper1,
 												 pointsLayers[indToAdd],
 												 indToAdd,
-												 dAlpha,
+												 0,
 												 Math.sqrt(3) * 0.5 * gWidth/2,
-												 gWidth/2,
+												 gWidth/2,	
 												 gWidth));
 				
-				//paths[paths.length-1].visible = false; //new item hide
 				
 
 				lastTime = millis();
-				
-				sState = STATE.FADEOUT;
-
-				
+				sState = STATE.FADEIN;
 				break;
 			
 			
 			case STATE.FADEOUT:
 
-				var diffTime = millis()- lastTime;
+				diffTime = millis()- lastTime;
 
 				paths[indToFade].fillColor.alpha *= (1-diffTime/FADE_TIME);
 
 				if(diffTime > FADE_TIME){
-					sState = STATE.CICLE;
 					paths[indToFade].remove();	
 					paths.splice(indToFade,1);
 					sState = STATE.CICLE;
@@ -218,12 +217,17 @@ window.onload = function() {
 			break;
 
 			case STATE.FADEIN:
-				
-				var diffTime = millis()- lastTime;
-				//paths[paths.length-1].fillColor.alpha *= (diffTime/FADE_TIME);
 
+				diffTime = millis()- lastTime;
+				var a =  dAlpha * (diffTime/FADE_TIME);
+				a = (a>0)? a : 0;
+				a = (a<1.0)? a : 1.0;
+				paths[paths.length-1].fillColor.alpha = a;
+				
 				if(diffTime > FADE_TIME){ 
-					sState = STATE.CICLE;
+					sState = STATE.FADEOUT;
+					lastTime = millis();
+
 				}
 
 			break;
