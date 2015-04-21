@@ -17,7 +17,7 @@ var MAX_LAYER = 10;
 var MIN_LAYER = 4;
 var MIN_ALPHA = 0.2;
 var MAX_ALPHA = 0.8;
-var FADE_TIME = 200;
+var FADE_TIME = 300;
 	//alpha max is 200 = 0.78% de alpah
     //min triangules is 5
 	
@@ -39,7 +39,7 @@ var STATE = {
 var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
 var symDist = {"V":[0.1, 1.15], "H":[1.1, 0.25]};
 var symWidths = {"V" : {"fs" : 0.839,
-					 	   "fs-company": 1.923},
+					 	   "fs-company": 1.5199240987},
 					 "H" : {"fs" : 0.92,
 							"fs-security":2.08, 
 							"fs-learning": 2.11,
@@ -182,7 +182,7 @@ window.onload = function() {
 				indToAdd = (indToAdd + 1) % pointsLayers.length; //cycle over pointsLayer,  0---> pointsLayer.lenght
 
 				dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
-				pointsLayers = shuffle(pointsLayers);
+				//pointsLayers = shuffle(pointsLayers);
 				
 				//rangeLayers.push(indToAdd);
 				//add new and hide it
@@ -197,7 +197,7 @@ window.onload = function() {
 				
 
 				lastTime = millis();
-				sState = STATE.FADEIN;
+				sState = STATE.FADEOUT;
 				break;
 			
 			
@@ -205,27 +205,35 @@ window.onload = function() {
 
 				diffTime = millis()- lastTime;
 
-				paths[indToFade].fillColor.alpha *= (1-diffTime/FADE_TIME);
+				var a =  paths[indToFade].fillColor.alpha * (1 - diffTime/FADE_TIME);
+				a = (a > 0)? a : 0;
+				a = (a < 1.0)? a : 1.0;
+				//console.log("out " + a);
+				paths[indToFade].fillColor.alpha = a;
 
 				if(diffTime > FADE_TIME){
 					paths[indToFade].remove();	
 					paths.splice(indToFade,1);
-					sState = STATE.CICLE;
+					sState = STATE.FADEIN;
+					lastTime = millis();
+
 					//paths[paths.length-1].visible = true;
 				}
 
 			break;
 
 			case STATE.FADEIN:
-
+			
 				diffTime = millis()- lastTime;
 				var a =  dAlpha * (diffTime/FADE_TIME);
-				a = (a>0)? a : 0;
-				a = (a<1.0)? a : 1.0;
+				a = (a > 0)? a : 0;
+				a = (a < 1.0)? a : 1.0;
+				//console.log("in " + a);
+
 				paths[paths.length-1].fillColor.alpha = a;
 				
 				if(diffTime > FADE_TIME){ 
-					sState = STATE.FADEOUT;
+					sState = STATE.CICLE;
 					lastTime = millis();
 
 				}

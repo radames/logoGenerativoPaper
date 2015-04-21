@@ -24,6 +24,7 @@ var lastTime = 0;
 
 var coresPrimarias = ["#2DBCB5", "#CE2A1E"];
 
+
 var STATE = {
     RAND: 0,
     ANIMA: 1,
@@ -68,9 +69,9 @@ window.onload = function() {
 
     var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
 
-   	var symDist = {"V":[0.1, 1.15], "H":[1.1, 0.25]};
-	var symWidths = {"V" : {"fs" : 0.839,
-					 	   "fs-company": 1.923},
+   	var symDist = {"V":[0.0724, 1.1568374446], "H":[1.1, 0.25]};
+	var symWidths = {"V" : {"fs" : 0.7245479534,
+					 	   "fs-company": 1.7055802074 },
 					 "H" : {"fs" : 0.92,
 							"fs-security":2.08, 
 							"fs-learning": 2.11,
@@ -79,6 +80,7 @@ window.onload = function() {
 							"fs-company": 2.07,
 							"fs-assistance": 2.56}};
 	
+
 	
 	$("#salvar").on('click', function () {
 		   paper3.activate();
@@ -149,6 +151,12 @@ window.onload = function() {
     	}
 	});	
 	
+	function changeColor(){
+
+		
+		
+	}
+
 	function simbolFromName(scope, name){
 		
 			var px0 = scope.view.center.x;
@@ -178,7 +186,7 @@ window.onload = function() {
 			scope.activate();
 			scope.project.clear();
 			var p = scope.project.importJSON(dataJSON);
-			var globalW = 58.96;
+			var globalW = 64.494;
 			p[0].fitBounds(new scope.Rectangle(0,0, globalW, globalW));
 			p[0].bounds.x = scope.view.bounds.x;
 			p[0].bounds.y = scope.view.bounds.y;
@@ -197,7 +205,7 @@ window.onload = function() {
 
 																 item.bounds.x =  p[0].bounds.x + globalW * symDist[dir][0];
 																 item.bounds.y =  p[0].bounds.y + globalW * symDist[dir][1];
-															  
+															     //item.fillColor = "#FFFFFF";
 															  	 scope.view.viewSize = scope.project.activeLayer.bounds;
 															  	 scope.view.update();	
 
