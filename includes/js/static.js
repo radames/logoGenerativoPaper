@@ -120,16 +120,7 @@ window.onload = function() {
 	selectedColorSave.on('change', function(){
 		changeColor(selectedColorSave.val());
 	});
-	
-	selectedColorSave.on('change', function(){
-		changeColor(selectedColorSave.val());
-	});
-	
-	
-	logoWidth.on('change', function(){
-			$("#embed-result").val(getEmbedURL());
-	});
-	
+		
 	saveDirRadio.on('change', function(){
 		loadSVG(paper3, paper2);
 	});
@@ -137,6 +128,13 @@ window.onload = function() {
 		loadSVG(paper3, paper2);
 	});
 	
+	selectedColorEmbed.on('change', function(){
+		$("#embed-result").val(getEmbedURL());
+	});
+	
+	logoWidth.on('change', function(){
+		$("#embed-result").val(getEmbedURL());
+	});
 
 	function getEmbedURL(){
 		var localURL = $(location).attr('href');
@@ -145,8 +143,9 @@ window.onload = function() {
 		var dir = embedDirRadio.filter(':checked').data("dir");
 		var fName = selectedEmbed.val();
 		var lWidth = logoWidth.val();
-		
-		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir;
+		var colorType = selectedColorEmbed.val();
+
+		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir + "&color=" + colorType ;
 	}
 		
 	$("#gerar-nome").on('click', function () {
@@ -244,7 +243,7 @@ window.onload = function() {
 
 																 item.bounds.x =  p[0].bounds.x + globalW * symDist[dir][0];
 																 item.bounds.y =  p[0].bounds.y + globalW * symDist[dir][1];
-															  	 if(!(coresSecundarias === "")){	   
+															  	 if(coresSecundarias !== ""){	   
 															  		item.fillColor = coresSecundarias;
 																 }
 															  	 scope.view.viewSize = scope.project.activeLayer.bounds;

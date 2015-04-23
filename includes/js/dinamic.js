@@ -26,6 +26,7 @@ var firstMillis = 0;
 var lastTime = 0;
 
 var coresPrimarias = ["#2DBCB5", "#CE2A1E"];
+var coresSecundarias = "";
 
 var STATE = {
     RAND: 0,
@@ -37,17 +38,17 @@ var STATE = {
 };
 
 var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
-var symDist = {"V":[0.1, 1.15], "H":[1.1, 0.25]};
-var symWidths = {"V" : {"fs" : 0.839,
-					 	   "fs-company": 1.5199240987},
-					 "H" : {"fs" : 0.92,
-							"fs-security":2.08, 
-							"fs-learning": 2.11,
-							"fs-insurance": 2.38,
-							"fs-entertainment": 3.38,
-							"fs-company": 2.07,
-							"fs-assistance": 2.56}};
 
+var symDist = {"V":[0.0724, 1.1568374446], "H":[1.1, 0.25]};
+var symWidths = {"V" : {"fs" : 0.7245479534,
+					   "fs-company": 1.7055802074 },
+				 "H" : {"fs" : 0.92,
+						"fs-security":2.08, 
+						"fs-learning": 2.11,
+						"fs-insurance": 2.38,
+						"fs-entertainment": 3.38,
+						"fs-company": 2.07,
+						"fs-assistance": 2.56}};
 
 var sState = STATE.RAND;
 
@@ -63,7 +64,7 @@ window.onload = function() {
 	
 	var fName = "";
 	var pos = "H";
-	
+	var parColor = "color";	
 	// parsing..
 	if(parameters.width !== undefined){
 		gWidth = parameters.width;
@@ -75,7 +76,27 @@ window.onload = function() {
 	if(parameters.pos !== undefined && ( parameters.pos === "V" || parameters.pos === "H")  ){
 		pos = parameters.pos; 
 	}
-	
+	if(parameters.color !== undefined && ( parameters.color === "vermelho" || parameters.color === "branco" || parameters.color === "preto") ){
+		parColor = parameters.color; 
+	}
+
+
+	switch(parColor){
+
+			case "branco":
+			    $('body').css('background', '#999999');
+				coresSecundarias = "#FFFFFF";
+				break;
+			case "vermelho":
+				coresSecundarias = "#cd171e";
+				break;
+			case "preto":
+				coresSecundarias = "#000000";
+				break;
+			case "color":
+				coresSecundarias = "";
+				break;
+	}
 	
 	var pointsLayers;
 	var paths = [];
@@ -110,7 +131,9 @@ window.onload = function() {
 															  
 																 item.bounds.x =  gWidth * symDist[pos][0];
 																 item.bounds.y =  gWidth * symDist[pos][1];
-															  
+															   	 if(coresSecundarias !== ""){	   
+															  		item.fillColor = coresSecundarias;
+																 }
 															 	 scope.view.viewSize = [scope.view.bounds.width +
 																						item.bounds.width + 
 																						item.bounds.x ,
@@ -254,7 +277,7 @@ function drawTriangle(scope, points, nLayer, alpha, px, py, width) {
 	scope.activate();
 	var path = new paper.Path();
 	
-	path.fillColor = coresPrimarias[ nLayer%2];
+	path.fillColor =  (coresSecundarias === "")?coresPrimarias[ nLayer%2]:coresSecundarias;
 	path.fillColor.alpha = alpha;
 
 	for(var i in points){
