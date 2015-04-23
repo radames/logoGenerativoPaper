@@ -145,7 +145,10 @@ window.onload = function() {
 		var lWidth = logoWidth.val();
 		var colorType = selectedColorEmbed.val();
 
-		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir + "&color=" + colorType ;
+		var src =  localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir + "&color=" + colorType ;
+		
+		return '<iframe width="100%" src="'+ src +'" scrolling="no" id="iframeLogo" width ="100%" height="100%" frameborder="0" ></iframe>'
+		
 	}
 		
 	$("#gerar-nome").on('click', function () {
