@@ -31,7 +31,7 @@
   		<section class="content" id="home">
   			<div class="criar-logo">
   				<div class="left">
-					<div><canvas id="logoCanvas1" width="208px" height="240px"></canvas></div>
+					<div id="divCanvas"><canvas id="logoCanvas1" width="208px" height="240px"></canvas></div>
   					<button id="gerar-aleatorio" class="button">Gerar Aleatório</button>
   				</div>
 				<div class="right">
@@ -61,7 +61,7 @@
 
 						<div class="select-content">
 							<select id="fs-type-embed" name="fs-type">
-								<option value="fs" data-name ="FS_Letters">FS</option>
+								<option value="fs" selected>FS</option>
 								<option value="fs-company">FS Company</option>
 								<option value="fs-entertainment">FS Entertainment</option>
 								<option value="fs-learning">FS Learning</option>
@@ -73,15 +73,11 @@
 						</div>
 						
 						<div class="select-content">
-							<select name="color-type-embed">
-								<option value="fs">FS</option>
-								<option value="fs-company">FS Company</option>
-								<option value="fs-entertainment">FS Entertainment</option>
-								<option value="fs-learning">FS Learning</option>
-								<option value="fs-security">FS Security</option>
-								<option value="fs-insurance">FS Insurance</option>
-								<option value="fs-assistance">FS Assistance</option>
-								<option value="apenas-simbolo">Apenas o símbolo</option>
+							<select id="color-type-embed" name="fs-color">
+								<option value="color" selected>Cores FS</option>
+								<option value="branco">Branco</option>
+								<option value="vermelho">Vermelho</option>
+								<option value="preto">Preto</option>
 							</select>
 						</div>
 						<input id="embed-result" type="text" class="link-embed" value="https://www.fscompany.com/watch?v=2a01Rg2g2Z8" />
@@ -128,15 +124,11 @@
 					</div>
 
 					<div class="select-content">
-							<select name="color-type-save">
-								<option value="fs">FS</option>
-								<option value="fs-company">FS Company</option>
-								<option value="fs-entertainment">FS Entertainment</option>
-								<option value="fs-learning">FS Learning</option>
-								<option value="fs-security">FS Security</option>
-								<option value="fs-insurance">FS Insurance</option>
-								<option value="fs-assistance">FS Assistance</option>
-								<option value="apenas-simbolo">Apenas o símbolo</option>
+							<select id="color-type-save" name="fs-color">
+								<option value="color" selected>Cores FS</option>
+								<option value="branco">Branco</option>
+								<option value="vermelho">Vermelho</option>
+								<option value="preto">Preto</option>
 							</select>
 					</div>
 				

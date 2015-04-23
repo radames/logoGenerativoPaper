@@ -23,6 +23,8 @@ var firstMillis = 0;
 var lastTime = 0;
 
 var coresPrimarias = ["#2DBCB5", "#CE2A1E"];
+var coresSecundarias = "";
+
 
 
 var STATE = {
@@ -93,11 +95,14 @@ window.onload = function() {
 
 	var saveDirRadio = $('input[name=posicao-download]');
 	var selectedSave = $('#fs-type-save');
+
+	var selectedColorSave = $('#color-type-save');
+	var selectedColorEmbed = $('#color-type-embed');
+
 	
 	$("#gerar-aleatorio").on('click', function () {
-			simbolGen(paper2);
-			loadSVG(paper3, paper2);
-		
+		simbolGen(paper2);
+		loadSVG(paper3, paper2);
     });
 	
 	$("#gerar-aleatorio").trigger("click"); //first click random in the beginning
@@ -106,15 +111,32 @@ window.onload = function() {
 	$("#embed-result").val(getEmbedURL());
 
 	embedDirRadio.on('change', function(){
-			$("#embed-result").val(getEmbedURL());
-
+		$("#embed-result").val(getEmbedURL());
 	});
 	selectedEmbed.on('change', function(){
-			$("#embed-result").val(getEmbedURL());
+		$("#embed-result").val(getEmbedURL());
 	});
+	
+	selectedColorSave.on('change', function(){
+		changeColor(selectedColorSave.val());
+	});
+	
+	selectedColorSave.on('change', function(){
+		changeColor(selectedColorSave.val());
+	});
+	
+	
 	logoWidth.on('change', function(){
 			$("#embed-result").val(getEmbedURL());
 	});
+	
+	saveDirRadio.on('change', function(){
+		loadSVG(paper3, paper2);
+	});
+	selectedSave.on('change', function(){
+		loadSVG(paper3, paper2);
+	});
+	
 
 	function getEmbedURL(){
 		var localURL = $(location).attr('href');
@@ -126,16 +148,7 @@ window.onload = function() {
 		
 		return localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir;
 	}
-	
-	saveDirRadio.on('change', function(){
-		loadSVG(paper3, paper2);
-	});
-	selectedSave.on('change', function(){
-		loadSVG(paper3, paper2);
-	});
-	
-
-	
+		
 	$("#gerar-nome").on('click', function () {
 			var nameCol = $("#nome-colaborador").val();
 			nameCol = noAccents(nameCol); // remove all accents
@@ -151,10 +164,36 @@ window.onload = function() {
     	}
 	});	
 	
-	function changeColor(){
+	function changeColor(val){
+		
+		switch(val){
 
-		
-		
+			case "branco":
+				$("#divCanvas").css("background-color", "#999999");	
+				coresSecundarias = "#FFFFFF";
+				break;
+			case "vermelho":
+				coresSecundarias = "#cd171e";
+				$("#divCanvas").css("background-color", "white");
+				break;
+			case "preto":
+				coresSecundarias = "#000000";
+				$("#divCanvas").css("background-color", "white");
+				break;
+			default:
+				coresSecundarias = ""
+				$("#divCanvas").css("background-color", "white");	
+				break;
+		}
+		if( $("#nome-colaborador").val() !== ""){ //gera outro simbolo baseado no nome mudando a cor
+			var e = jQuery.Event("keyup");
+			e.keyCode = 13;
+			$("#nome-colaborador").trigger(e);
+			
+		}else{
+			$("#gerar-aleatorio").trigger("click"); // gera novo simbolo quando muda a core
+		}
+
 	}
 
 	function simbolFromName(scope, name){
@@ -205,7 +244,9 @@ window.onload = function() {
 
 																 item.bounds.x =  p[0].bounds.x + globalW * symDist[dir][0];
 																 item.bounds.y =  p[0].bounds.y + globalW * symDist[dir][1];
-															     //item.fillColor = "#FFFFFF";
+															  	 if(!(coresSecundarias === "")){	   
+															  		item.fillColor = coresSecundarias;
+																 }
 															  	 scope.view.viewSize = scope.project.activeLayer.bounds;
 															  	 scope.view.update();	
 
@@ -315,7 +356,7 @@ function drawTriangle(scope, points, nLayer, alpha, px, py, width) {
 	scope.activate();
 	var path = new paper.Path();
 	
-	path.fillColor = coresPrimarias[ nLayer%2];
+	path.fillColor =  (coresSecundarias === "")?coresPrimarias[ nLayer%2]:coresSecundarias;
 	path.fillColor.alpha = alpha;
 
 	for(var i in points){
