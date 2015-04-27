@@ -39,9 +39,9 @@ var STATE = {
 
 var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
 
-var symDist = {"V":[0.0724, 1.1568374446], "H":[1.1, 0.25]};
+var symDist = {"V":[0.08360081601, 1.1568374446], "H":[1.1, 0.25]};
 var symWidths = {"V" : {"fs" : 0.7245479534,
-					   "fs-company": 1.7055802074 },
+					   "fs-company": 1.6268051711 },
 				 "H" : {"fs" : 0.92,
 						"fs-security":2.08, 
 						"fs-learning": 2.11,
@@ -49,6 +49,7 @@ var symWidths = {"V" : {"fs" : 0.7245479534,
 						"fs-entertainment": 3.38,
 						"fs-company": 2.07,
 						"fs-assistance": 2.56}};
+
 
 var sState = STATE.RAND;
 
