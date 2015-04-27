@@ -73,7 +73,7 @@ window.onload = function() {
 
    	var symDist = {"V":[0.0724, 1.1568374446], "H":[1.1, 0.25]};
 	var symWidths = {"V" : {"fs" : 0.7245479534,
-					 	   "fs-company": 1.7055802074 },
+					 	   "fs-company": 1.6268051711 },
 					 "H" : {"fs" : 0.92,
 							"fs-security":2.08, 
 							"fs-learning": 2.11,
