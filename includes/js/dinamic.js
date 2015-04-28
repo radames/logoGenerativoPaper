@@ -39,9 +39,9 @@ var STATE = {
 
 var fileNames = ["fs", "fs-security", "fs-learning", "fs-insurance", "fs-entertainment","fs-company","fs-assistance"];
 
-var symDist = {"V":[0.08360081601, 1.1568374446], "H":[1.0074288131, 0.2467870257]};
+var symDist = {"V":[0.08360081601, 1.1568374446], "H":[1.0185630838, 0.2467870257]};
 var symWidths = {"V" : {"fs" : 0.7245479534,
-					   "fs-company": 1.6268051711 },
+						 "fs-company": 1.6268051711 },
 				 "H" : {"fs" : 0.791,
 						"fs-security":1.788, 
 						"fs-learning": 1.8146,
