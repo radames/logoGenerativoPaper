@@ -337,20 +337,28 @@ window.onload = function() {
 //Save SVG from paper.js as a file.
 var downloadAsSVG = function (fileName) {
 
-   if(!fileName) {
+	if(!fileName) {
 	   var gTime = new Date();
-       fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + ".svg";
-   }
+	   fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + ".svg";
+	}
 
-   var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
+	var url = "data:image/svg+xml;base64," + btoa(paper.project.exportSVG({asString:true}));
 
-   var link = document.createElement("a");
-   link.download = fileName;
-   link.href = url;
-   link.click();
+	downloadDataUri({
+		data: url,
+		filename: fileName
+	});
+
 };
 
-
+function downloadDataUri(options) {
+	if (!options.url)
+		options.url = "http://download-data-uri.appspot.com/";
+	$('<form method="post" action="' + options.url
+		+ '" style="display:none"><input type="hidden" name="filename" value="'
+		+ options.filename + '"/><input type="hidden" name="data" value="'
+		+ options.data + '"/></form>').appendTo('body').submit().remove();
+}
 
 
 function drawTriangle(scope, points, nLayer, alpha, px, py, width) {
