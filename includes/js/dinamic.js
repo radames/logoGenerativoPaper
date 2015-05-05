@@ -57,8 +57,16 @@ var sState = STATE.RAND;
 
 var tool;
 
+
+
+var GenerativeLogo = function() {
+  this.alpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
+};
+
 window.onload = function() {
-	
+	var glGUI = new GenerativeLogo();
+  	var gui = new dat.GUI();
+  	gui.add(glGUI, 'alpha',	MIN_ALPHA,MAX_ALPHA);
 	
 	var parameters = getUrlVars(); //which leads to:
 	
@@ -67,6 +75,7 @@ window.onload = function() {
 	var fName = "";
 	var pos = "H";
 	var parColor = "color";	
+	var nTriangles = 4;
 	// parsing..
 	if(parameters.width !== undefined){
 		gWidth = parameters.width;
@@ -81,6 +90,12 @@ window.onload = function() {
 	if(parameters.color !== undefined && ( parameters.color === "vermelho" || parameters.color === "branco" || parameters.color === "preto") ){
 		parColor = parameters.color; 
 	}
+	
+	if(parameters.nTriangles !== undefined && ( parameters.nTriangles >= MIN_LAYER && parameters.nTriangles <= MAX_LAYER)){
+		nTriangles = parameters.nTriangles; 
+	}
+
+
 
 
 	switch(parColor){
@@ -164,7 +179,7 @@ window.onload = function() {
 				
 				paths = [];	
 				sState = STATE.ANIMA;
-				nLayer = random(MIN_LAYER, MAX_LAYER);
+				nLayer = nTriangles;
 				staticNLayer = nLayer;
 				
 				rangeLayers = range(staticNLayer); // list to ensure not reapete layers
@@ -177,7 +192,7 @@ window.onload = function() {
 
 				diff = millis() - lastTime;
 				rTime =10;
-				dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
+				dAlpha = glGUI.alpha;
 
 				if (diff > rTime) { 	
 					paths.push( drawTriangle(paper1,
@@ -206,7 +221,7 @@ window.onload = function() {
 				indToFade = (indToFade + 1) % paths.length; //ycle over paths,  0---> paths.lenght
 				indToAdd = (indToAdd + 1) % pointsLayers.length; //cycle over pointsLayer,  0---> pointsLayer.lenght
 
-				dAlpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
+				dAlpha = glGUI.alpha;
 				//pointsLayers = shuffle(pointsLayers);
 				
 				//rangeLayers.push(indToAdd);
