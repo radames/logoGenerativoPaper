@@ -30,7 +30,6 @@ var coresSecundarias = "";
 
 var STATE = {
     RAND: 0,
-    ANIMA: 1,
     GRAD: 2,
 	CICLE: 3,
 	FADEIN: 4,
@@ -168,7 +167,7 @@ window.onload = function() {
 	}
 	
 	
-	var diff, diffTime, rTime, rPos,indToFade, indToAdd, rangeLayers, dAlpha, nLayer, staticNLayer;
+	var diff, diffTime, rTime, rPos,indToFade, indToAdd, rangeLayers, dAlpha, alphaFadeIn, alphaFadeOut;
 	
 	paper1.view.onFrame = function(event) {
 		switch (sState) {
@@ -176,43 +175,24 @@ window.onload = function() {
 				
 				paper1.project.activeLayer.removeChildren();
 		
-				
 				paths = [];	
-				sState = STATE.ANIMA;
-				nLayer = nTriangles;
-				staticNLayer = nLayer;
-				
-				rangeLayers = range(staticNLayer); // list to ensure not reapete layers
-				
-				lastTime = millis();
-				break;
-
-			case STATE.ANIMA:
-
-
-				diff = millis() - lastTime;
-				rTime =10;
+				rangeLayers = range(nTriangles); // list to ensure not reapete layers
 				dAlpha = glGUI.alpha;
-
-				if (diff > rTime) { 	
+				
+				for(var n = 0; n < nTriangles; n++){
 					paths.push( drawTriangle(paper1,
-											 pointsLayers[nLayer],
-											 nLayer,
+											 pointsLayers[n],
+											 n,
 											 dAlpha,
 											 Math.sqrt(3) * 0.5 * gWidth/2,
 											 gWidth/2,
 											 gWidth));
-
-					nLayer--;
-					lastTime = millis();
 				}
-				dAlpha = MAX_ALPHA*diff/rTime;
 
-				if (nLayer <= 0) {
-					sState =  STATE.CICLE;
-					indToFade = 0;
-					indToAdd = 0 ;
-				}
+				sState =  STATE.CICLE;
+				indToFade = 0;
+				indToAdd = 0 ;
+				
 				break;
 			
 
@@ -229,29 +209,32 @@ window.onload = function() {
 				paths.push( drawTriangle(paper1,
 												 pointsLayers[indToAdd],
 												 indToAdd,
-												 0,
+												 dAlpha,
 												 Math.sqrt(3) * 0.5 * gWidth/2,
 												 gWidth/2,	
 												 gWidth));
 				
-				
 
 				lastTime = millis();
 				sState = STATE.FADEOUT;
+				
+				alphaFadeOut = paths[indToFade].fillColor.alpha;
+				alphaFadeIn = paths[paths.length-1].fillColor.alpha;
+				paths[paths.length-1].fillColor.alpha = 0;
 				break;
-			
 			
 			case STATE.FADEOUT:
 
-				diffTime = millis()- lastTime;
+				diffTime = millis() - lastTime;
 
-				var a =  paths[indToFade].fillColor.alpha * (1 - diffTime/FADE_TIME);
+				var a =  alphaFadeOut * (1 - diffTime/FADE_TIME);
 				a = (a > 0)? a : 0;
 				a = (a < 1.0)? a : 1.0;
 				//console.log("out " + a);
 				paths[indToFade].fillColor.alpha = a;
 
-				if(diffTime > FADE_TIME){
+				if(diffTime >= FADE_TIME){
+					
 					paths[indToFade].remove();	
 					paths.splice(indToFade,1);
 					sState = STATE.FADEIN;
@@ -259,23 +242,21 @@ window.onload = function() {
 
 					//paths[paths.length-1].visible = true;
 				}
-
 			break;
 
 			case STATE.FADEIN:
 			
-				diffTime = millis()- lastTime;
-				var a =  dAlpha * (diffTime/FADE_TIME);
+				diffTime = millis() - lastTime;
+				var a =  alphaFadeIn * (diffTime/FADE_TIME);
 				a = (a > 0)? a : 0;
 				a = (a < 1.0)? a : 1.0;
 				//console.log("in " + a);
 
 				paths[paths.length-1].fillColor.alpha = a;
 				
-				if(diffTime > FADE_TIME){ 
-					sState = STATE.CICLE;
+				if(diffTime >= FADE_TIME){ 
+					sState = STATE.CICLE;	
 					lastTime = millis();
-
 				}
 
 			break;
