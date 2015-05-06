@@ -100,7 +100,11 @@ window.onload = function() {
 		toDownload = parameters.download; 
 	}
 	
-	var fsVasState = parameters.parametro;
+	
+	var fsVasState  = parameters.parametro;
+	if(fsVasState === undefined){
+	 	fsVasState = random(0,100);
+	}
 	fsVasState = fsVasState > 100 ? 100 : fsVasState;
 	fsVasState = fsVasState < 0 ? 0 : fsVasState;
 
