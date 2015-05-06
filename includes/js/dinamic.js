@@ -100,9 +100,12 @@ window.onload = function() {
 		toDownload = parameters.download; 
 	}
 	
-	//fsVasState = parameters.fsvas;
+	var fsVasState = parameters.parametro;
+	fsVasState = fsVasState > 100 ? 100 : fsVasState;
+	fsVasState = fsVasState < 0 ? 0 : fsVasState;
+
 	//from the server
-	var fsVasState = httpGet("http://www.fscompany.com.br/logo.php");
+	//var fsVasState = httpGet("http://www.fscompany.com.br/logo.php");
 
 	var nTriangles = MIN_LAYER + (MAX_LAYER - MIN_LAYER) * fsVasState/100;
 	var dAlpha = MIN_ALPHA + (MAX_ALPHA - MIN_ALPHA) * fsVasState/100;	
