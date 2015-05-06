@@ -15,9 +15,9 @@
 
 var MAX_LAYER = 10;
 var MIN_LAYER = 4;
-var MIN_ALPHA = 0.2;
-var MAX_ALPHA = 0.8;
-var FADE_TIME = 300;
+var MIN_ALPHA = 0.40;
+var MAX_ALPHA = 0.75;
+var FADE_TIME = 500;
 	//alpha max is 200 = 0.78% de alpah
     //min triangules is 5
 	
@@ -100,13 +100,14 @@ window.onload = function() {
 		toDownload = parameters.download; 
 	}
 	
+	//fsVasState = parameters.fsvas;
 	//from the server
 	var fsVasState = httpGet("http://www.fscompany.com.br/logo.php");
 
 	var nTriangles = MIN_LAYER + (MAX_LAYER - MIN_LAYER) * fsVasState/100;
 	var dAlpha = MIN_ALPHA + (MAX_ALPHA - MIN_ALPHA) * fsVasState/100;	
 	
-	//console.log(nTriangles, dAlpha);
+	console.log(nTriangles, dAlpha);
 
 	switch(parColor){
 
