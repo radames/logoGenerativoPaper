@@ -57,24 +57,31 @@ var sState = STATE.RAND;
 var tool;
 
 
+function httpGet(theUrl)
+{
+    var xmlHttp = null;
 
-var GenerativeLogo = function() {
-  this.alpha = MIN_ALPHA + Math.random()*(MAX_ALPHA - MIN_ALPHA);
-};
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
 
 window.onload = function() {
-	var glGUI = new GenerativeLogo();
-  	var gui = new dat.GUI();
-  	gui.add(glGUI, 'alpha',	MIN_ALPHA,MAX_ALPHA);
+
 	
 	var parameters = getUrlVars(); //which leads to:
 	
+
 	var gWidth = 70;
 	
 	var fName = "";
 	var pos = "H";
 	var parColor = "color";	
-	var nTriangles = 4;
+	
+	var toDownload = false;
+	
+	
 	// parsing..
 	if(parameters.width !== undefined){
 		gWidth = parameters.width;
@@ -89,13 +96,17 @@ window.onload = function() {
 	if(parameters.color !== undefined && ( parameters.color === "vermelho" || parameters.color === "branco" || parameters.color === "preto") ){
 		parColor = parameters.color; 
 	}
-	
-	if(parameters.nTriangles !== undefined && ( parameters.nTriangles >= MIN_LAYER && parameters.nTriangles <= MAX_LAYER)){
-		nTriangles = parameters.nTriangles; 
+	if(parameters.download !== undefined && ( parameters.download === "true" || parameters.download === "false")){
+		toDownload = parameters.download; 
 	}
+	
+	//from the server
+	var fsVasState = httpGet("http://www.fscompany.com.br/logo.php");
 
-
-
+	var nTriangles = MIN_LAYER + (MAX_LAYER - MIN_LAYER) * fsVasState/100;
+	var dAlpha = MIN_ALPHA + (MAX_ALPHA - MIN_ALPHA) * fsVasState/100;	
+	
+	//console.log(nTriangles, dAlpha);
 
 	switch(parColor){
 
@@ -167,7 +178,7 @@ window.onload = function() {
 	}
 	
 	
-	var diff, diffTime, rTime, rPos,indToFade, indToAdd, rangeLayers, dAlpha, alphaFadeIn, alphaFadeOut;
+	var diff, diffTime, rTime, rPos,indToFade, indToAdd, rangeLayers, alphaFadeIn, alphaFadeOut;
 	
 	paper1.view.onFrame = function(event) {
 		switch (sState) {
@@ -177,7 +188,6 @@ window.onload = function() {
 		
 				paths = [];	
 				rangeLayers = range(nTriangles); // list to ensure not reapete layers
-				dAlpha = glGUI.alpha;
 				
 				for(var n = 0; n < nTriangles; n++){
 					paths.push( drawTriangle(paper1,
@@ -201,7 +211,6 @@ window.onload = function() {
 				indToFade = (indToFade + 1) % paths.length; //ycle over paths,  0---> paths.lenght
 				indToAdd = (indToAdd + 1) % pointsLayers.length; //cycle over pointsLayer,  0---> pointsLayer.lenght
 
-				dAlpha = glGUI.alpha;
 				//pointsLayers = shuffle(pointsLayers);
 				
 				//rangeLayers.push(indToAdd);
@@ -221,6 +230,10 @@ window.onload = function() {
 				alphaFadeOut = paths[indToFade].fillColor.alpha;
 				alphaFadeIn = paths[paths.length-1].fillColor.alpha;
 				paths[paths.length-1].fillColor.alpha = 0;
+				if(toDownload){
+					toDownload = false;
+ 		  		    downloadAsSVG();
+				}
 				break;
 			
 			case STATE.FADEOUT:
@@ -289,4 +302,29 @@ function drawTriangle(scope, points, nLayer, alpha, px, py, width) {
 
 	return(path);
 
+}
+
+var downloadAsSVG = function (fileName) {
+
+	if(!fileName) {
+	   var gTime = new Date();
+	   fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + ".svg";
+	}
+
+	var url = "data:image/svg+xml;base64," + btoa(paper.project.exportSVG({asString:true}));
+
+	downloadDataUri({
+		data: url,
+		filename: fileName
+	});
+
+};
+
+function downloadDataUri(options) {
+	if (!options.url)
+		options.url = "http://download-data-uri.appspot.com/";
+	$('<form method="post" action="' + options.url
+		+ '" style="display:none"><input type="hidden" name="filename" value="'
+		+ options.filename + '"/><input type="hidden" name="data" value="'
+		+ options.data + '"/></form>').appendTo('body').submit().remove();
 }
