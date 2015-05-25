@@ -130,3 +130,7 @@ function getUrlVars() { // Read a page's GET URL variables and return them as an
     }
     return vars;
 }
+
+function precise_round(num,decimals){
+	return Math.round(num*Math.pow(10,decimals))/Math.pow(10,decimals);
+}

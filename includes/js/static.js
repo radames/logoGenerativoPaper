@@ -12,9 +12,8 @@
 
 var MAX_LAYER = 10;
 var MIN_LAYER = 4;
-var MIN_ALPHA = 0.2;
-var MAX_ALPHA = 0.8;
-
+var MIN_ALPHA = 0.40;
+var MAX_ALPHA = 0.75;
 	//alpha max is 200 = 0.78% de alpah
     //min triangules is 5
 	
@@ -86,7 +85,7 @@ window.onload = function() {
 	
 	$("#salvar").on('click', function () {
 		   paper3.activate();
-		   downloadAsSVG();
+		   downloadAsPNG();
     });
 
 	var embedDirRadio = $('input[name=posicao-embed]');
@@ -147,7 +146,7 @@ window.onload = function() {
 
 		var src =  localURL + "embed.html?width=" + lWidth + "&type=" + fName + "&pos=" + dir + "&color=" + colorType ;
 		
-		return '<iframe src="'+ src +'" scrolling="no" id="iframeLogo" width ="100%" height="100%" frameborder="0" ></iframe>'
+		return '<iframe src="'+ src +'" scrolling="no" id="iframeLogo" width ="100%" height="100%" frameborder="0" ></iframe>';
 		
 	}
 		
@@ -183,7 +182,7 @@ window.onload = function() {
 				$("#divCanvas").css("background-color", "white");
 				break;
 			default:
-				coresSecundarias = ""
+				coresSecundarias = "";
 				$("#divCanvas").css("background-color", "white");	
 				break;
 		}
@@ -271,10 +270,11 @@ window.onload = function() {
 				//random if names is undefined	
 				var maxlayer = random(MIN_LAYER, MAX_LAYER);
 				var maxalpha = MIN_ALPHA + Math.random()*(MAX_ALPHA-MIN_ALPHA);
-
+				
 				rState = 0;
-		
+				var tAlpha; //tentativa resolver linhas, pequenas variacoes noa alpa	
 				for(var i = 0; i < maxlayer; i++){
+					tAlpha = maxalpha *(1 - (0.5-Math.random())/2);
 					var ind = randPos[random(randPos.length)];
 					while( pointsLayers[ind].indexOf(rState) === -1 && (rState !== -1)){
 						ind = randPos[random(randPos.length)];
@@ -286,7 +286,7 @@ window.onload = function() {
 					paths2.push( drawTriangle(scope,
 											  pointsLayers[ind],
 											  i,
-											  maxalpha,
+											  tAlpha,
 											  px,
 											  py,
 											  w));
@@ -298,8 +298,9 @@ window.onload = function() {
 				var maxLayer = MIN_LAYER + name.length % (MAX_LAYER - MIN_LAYER); // constrain the maxLayer based on the random maxLayer
 				var maxalpha = MIN_ALPHA + (maxLayer/MAX_LAYER)*(MAX_ALPHA - MIN_ALPHA);
 				rState = 0;
-				
+				var tAlpha;
 				for(var i = 0; i < maxLayer; i++){
+					tAlpha = maxalpha * (1 - (0.5-Math.random())/2);
 					var l = name[i % name.length];
 					
 					
@@ -315,7 +316,7 @@ window.onload = function() {
 					paths2.push( drawTriangle(scope,
 											  pointsLayers[ind],
 											  i,
-											  maxalpha,
+											  tAlpha,
 											  px,
 											  py,
 											  w));
@@ -323,7 +324,6 @@ window.onload = function() {
 				
 	
 			}
-
 
 			scope.view.update();
 
@@ -351,6 +351,23 @@ var downloadAsSVG = function (fileName) {
 
 };
 
+var downloadAsPNG = function (fileName) {
+	var canvas3 = document.getElementById('finalCanvas');
+	
+	if(!fileName) {
+	   var gTime = new Date();
+	   fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + ".png";
+	}
+
+	var url = canvas3.toDataURL();
+
+	downloadDataUri({
+		data: url,
+		filename: fileName
+	});
+
+};
+
 function downloadDataUri(options) {
 	if (!options.url)
 		options.url = "http://download-data-uri.appspot.com/";
@@ -370,8 +387,9 @@ function drawTriangle(scope, points, nLayer, alpha, px, py, width) {
 	path.fillColor.alpha = alpha;
 
 	for(var i in points){
-		path.add(new paper.Point(px + width/2 * Math.sin(points[i] * Math.PI / 3),
-						   		 py + width/2 * Math.cos(points[i] * Math.PI / 3))); 
+		var xx = px + width/2 * Math.sin(points[i] * Math.PI / 3);
+		var yy = py + width/2 * Math.cos(points[i] * Math.PI / 3);
+		path.add(new paper.Point(precise_round(xx,2), precise_round(yy,2)));
 	}
 	
 	path.closed = true;
