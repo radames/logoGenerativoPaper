@@ -15,7 +15,7 @@
 
 var MAX_LAYER = 10;
 var MIN_LAYER = 4;
-var MIN_ALPHA = 0.40;
+var MIN_ALPHA = 0.50;
 var MAX_ALPHA = 0.75;
 var FADE_TIME = 500;
 	//alpha max is 200 = 0.78% de alpah
