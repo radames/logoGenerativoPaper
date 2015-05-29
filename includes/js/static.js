@@ -85,7 +85,9 @@ window.onload = function() {
 	
 	$("#salvar").on('click', function () {
 		   paper3.activate();
-		   downloadAsPNG();
+		   var fileType = $('input[name=type-download]');
+		   var fileTypeVal = fileType.filter(':checked').val();
+		   downloadImage(fileTypeVal);
     });
 
 	var embedDirRadio = $('input[name=posicao-embed]');
@@ -335,36 +337,31 @@ window.onload = function() {
 
 //currently name doesn't seem to work in some browsers.
 //Save SVG from paper.js as a file.
-var downloadAsSVG = function (fileName) {
 
-	if(!fileName) {
-	   var gTime = new Date();
-	   fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + ".svg";
+
+
+var downloadImage = function (type) {
+	var url;
+	if(type === "png"){
+		var canvas3 = document.getElementById('finalCanvas');
+		url = canvas3.toDataURL();
+	}else if(type === "svg"){
+		url = "data:image/svg+xml;base64," + btoa(paper.project.exportSVG({asString:true}));
 	}
 
-	var url = "data:image/svg+xml;base64," + btoa(paper.project.exportSVG({asString:true}));
+	var gTime = new Date();
+	var fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + "." + type;
 
-	downloadDataUri({
-		data: url,
-		filename: fileName
-	});
-
-};
-
-var downloadAsPNG = function (fileName) {
-	var canvas3 = document.getElementById('finalCanvas');
 	
-	if(!fileName) {
-	   var gTime = new Date();
-	   fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + ".png";
-	}
-
-	var url = canvas3.toDataURL();
-
-	downloadDataUri({
-		data: url,
-		filename: fileName
-	});
+	var link = document.createElement("a");
+   	link.download = fileName;
+    link.href = url;
+   	link.click();
+	
+//	downloadDataUri({
+//		data: url,
+//		filename: fileName
+//	});
 
 };
 
