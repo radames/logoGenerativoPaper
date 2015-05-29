@@ -21,7 +21,7 @@ var MAX_ALPHA = 0.75;
 var firstMillis = 0;
 var lastTime = 0;
 
-var coresPrimarias = ["#2DBCB5", "#CE2A1E"];
+var coresPrimarias = ["#2DBCB5", "#CD171E"];
 var coresSecundarias = "";
 
 

@@ -96,20 +96,45 @@
   			</div>
 
   			<div class="print-logo">
-				<h2>Vai imprimir?</h2>
-				<p>Então faça o download do símbolo (.svg)</p>
+				<h2>Faça download</h2>
+				<!-- <p>Então faça o download do símbolo (.svg)</p> -->
+					<table>
+						<tr>
+							<td>
+								<span class="radio-content">
+									<input type="radio" name="type-download" id="svg-gerado" value="svg" checked>
+									<label for="svg-gerado"><span></span> svg</label>
+								</span>
+							</td>
+							<td>
+								<span class="radio-content">
+									<input type="radio" name="type-download" id="png-gerado" value="png">
+									<label for="png-gerado"><span></span> png</label>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<span class="radio-content">
+									<input type="radio" name="posicao-download" id="horizontal-gerado" data-dir="H" checked>
+									<label for="horizontal-gerado"><span></span></label>
+								</span>
+								<label for="horizontal-gerado" class="horizontal">horizontal</label>
+							</td>
+							<td>
+								<span class="radio-content">
+									<input type="radio" name="posicao-download" id="vertical-gerado"  data-dir="V">
+									<label for="vertical-gerado"><span></span></label>
+								</span>
+								<label for="vertical-gerado" class="vertical">vertical</label>
+							</td>
+						</tr>
+					</table>
+					
 
-					<span class="radio-content">
-						<input type="radio" name="posicao-download" id="horizontal-gerado" data-dir="H" checked>
-						<label for="horizontal-gerado"><span></span></label>
-					</span>
-					<label for="horizontal-gerado" class="horizontal">horizontal</label>
+					
 
-					<span class="radio-content">
-						<input type="radio" name="posicao-download" id="vertical-gerado"  data-dir="V">
-						<label for="vertical-gerado"><span></span></label>
-					</span>
-					<label for="vertical-gerado" class="vertical">vertical</label>
+					
 
 					<div class="select-content">
 						<select id="fs-type-save" name="fs-type">
