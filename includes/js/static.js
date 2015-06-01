@@ -276,7 +276,7 @@ window.onload = function() {
 				rState = 0;
 				var tAlpha; //tentativa resolver linhas, pequenas variacoes noa alpa	
 				
-				console.log("   ");
+			//	console.log("   ");
 				
 				var lastPointList;
 								
