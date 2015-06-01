@@ -275,16 +275,39 @@ window.onload = function() {
 				
 				rState = 0;
 				var tAlpha; //tentativa resolver linhas, pequenas variacoes noa alpa	
+				
+				console.log("   ");
+				
+				var lastPointList;
+								
 				for(var i = 0; i < maxlayer; i++){
-					tAlpha = maxalpha *(1 - (0.5-Math.random())/2);
-					var ind = randPos[random(randPos.length)];
+					
+		
+					var ind = randPos[random(randPos.length)]; //randoPos has random points from all combinations
+					// ind, is as random number for this random list
+					
+					//
 					while( pointsLayers[ind].indexOf(rState) === -1 && (rState !== -1)){
 						ind = randPos[random(randPos.length)];
 					}
 					rState = (rState === 0)? 3: -1;
-
-					randPos.splice(ind,1);
-
+					//delete the element IND from the list randPos
+					randPos.splice(randPos.indexOf(ind),1);
+					
+					tAlpha = maxalpha - i*0.05;	
+					
+					//checking if they have two same vertices
+					
+//					if( lastPointList !== undefined){
+//						var count = 0;
+//						for(var ele in lastPointList){
+//							if( pointsLayers[ind].indexOf(lastPointList[ele]) > -1 ){
+//								count++;	
+//							}
+//						}
+//					}
+					
+	
 					paths2.push( drawTriangle(scope,
 											  pointsLayers[ind],
 											  i,
@@ -292,6 +315,7 @@ window.onload = function() {
 											  px,
 											  py,
 											  w));
+					//lastPointList = pointsLayers[ind];
 				}
 	
 				
@@ -302,7 +326,7 @@ window.onload = function() {
 				rState = 0;
 				var tAlpha;
 				for(var i = 0; i < maxLayer; i++){
-					tAlpha = maxalpha * (1 - (0.5-Math.random())/2);
+					tAlpha = maxalpha - i*0.05;	
 					var l = name[i % name.length];
 					
 					
@@ -382,13 +406,12 @@ function drawTriangle(scope, points, nLayer, alpha, px, py, width) {
 	
 	path.fillColor =  (coresSecundarias === "")?coresPrimarias[ nLayer%2]:coresSecundarias;
 	path.fillColor.alpha = alpha;
-
+	
 	for(var i in points){
 		var xx = px + width/2 * Math.sin(points[i] * Math.PI / 3);
 		var yy = py + width/2 * Math.cos(points[i] * Math.PI / 3);
-		path.add(new paper.Point(precise_round(xx,2), precise_round(yy,2)));
-	}
-	
+		path.add(new paper.Point(xx, yy));
+	}	
 	path.closed = true;
 	path.fullySelected = false;
 	scope.view.draw();
