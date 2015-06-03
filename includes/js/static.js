@@ -87,7 +87,7 @@ window.onload = function() {
 		   paper3.activate();
 		   var fileType = $('input[name=type-download]');
 		   var fileTypeVal = fileType.filter(':checked').val();
-		   downloadImage(fileTypeVal);
+		   downloadImage(paper3, fileTypeVal);
     });
 
 	var embedDirRadio = $('input[name=posicao-embed]');
@@ -364,28 +364,81 @@ window.onload = function() {
 
 
 
-var downloadImage = function (type) {
-	var url;
-	if(type === "png"){
-		var canvas3 = document.getElementById('finalCanvas');
-		url = canvas3.toDataURL();
-	}else if(type === "svg"){
-		url = "data:image/svg+xml;base64," + btoa(paper.project.exportSVG({asString:true}));
-	}
-
+var downloadImage = function (toCopy, type) {
+	
 	var gTime = new Date();
 	var fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + "." + type;
 
+
 	
+	if(type === "png"){
+		
+		var dataJSON = toCopy.project.exportJSON();	
+		
+		var paperTmp = new paper.PaperScope();
+		var canvas = document.createElement('canvas');
+
+		paperTmp.setup(canvas);
+		
+		paperTmp.activate();
+		paperTmp.project.clear();
+		
+		var p = paperTmp.project.importJSON(dataJSON);		
+		
+		p[0].scale(25);
+		
+		p[0].bounds.x = paperTmp.view.bounds.x;
+		p[0].bounds.y = paperTmp.view.bounds.y;
+
+		
+		paperTmp.view.viewSize.width = p[0].bounds.width;
+		paperTmp.view.viewSize.height = p[0].bounds.height;
+
+		paperTmp.view.update();
+
+		var url = "data:image/svg+xml;base64," + btoa(paper.project.exportSVG({asString:true}));
+		
+		var image = new Image();
+		
+		image.src = url;
+		image.onload = function() {
+			var canvas = document.createElement('canvas');
+			canvas.width = image.width;
+			canvas.height = image.height;
+			var context = canvas.getContext('2d');
+			context.drawImage(image, 0, 0);
+
+			var url = canvas.toDataURL('image/png');
+			
+			downloadDataUri({
+				data: url,
+				filename: fileName
+			});
+			
+		}
+		
+		
+		
+		
+	}else if(type === "svg"){
+		
+		toCopy.activate();
+		var url = "data:image/svg+xml;base64," + btoa(paper.project.exportSVG({asString:true}));
+
+		downloadDataUri({
+			data: url,
+			filename: fileName
+		});
+		
+	}
+
+
 //	var link = document.createElement("a");
 //   	link.download = fileName;
 //    link.href = url;
 //   	link.click();
-	
-	downloadDataUri({
-		data: url,
-		filename: fileName
-	});
+
+
 
 };
 
