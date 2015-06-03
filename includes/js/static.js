@@ -377,15 +377,15 @@ var downloadImage = function (type) {
 	var fileName = "fslogo-"+ gTime.getHours() + ""+ gTime.getMinutes() + "" + gTime.getSeconds() + "." + type;
 
 	
-	var link = document.createElement("a");
-   	link.download = fileName;
-    link.href = url;
-   	link.click();
+//	var link = document.createElement("a");
+//   	link.download = fileName;
+//    link.href = url;
+//   	link.click();
 	
-//	downloadDataUri({
-//		data: url,
-//		filename: fileName
-//	});
+	downloadDataUri({
+		data: url,
+		filename: fileName
+	});
 
 };
 
