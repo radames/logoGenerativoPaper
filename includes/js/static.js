@@ -425,18 +425,20 @@ var downloadImage = function (toCopy, type) {
 		toCopy.activate();
 		var url = "data:image/svg+xml;base64," + btoa(paper.project.exportSVG({asString:true}));
 
-		downloadDataUri({
-			data: url,
-			filename: fileName
-		});
+//		downloadDataUri({
+//			data: url,
+//			filename: fileName
+//		});
+//		
+
+		var link = document.createElement("a");
+		link.download = fileName;
+		link.href = url;
+		link.click();
+
+
 		
 	}
-
-
-//	var link = document.createElement("a");
-//   	link.download = fileName;
-//    link.href = url;
-//   	link.click();
 
 
 
